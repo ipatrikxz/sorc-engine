@@ -1,0 +1,5 @@
+F:\_GraphicsDev\SorcEngine\SorcEngine\src\glad.c;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glad.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\src\Main.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\Main.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\vendor\glad\src\glad.c;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glad.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\vendor\glm\glm\detail\glm.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glm.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\vendor\glm\glm\glm.cppm;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glm.obj
