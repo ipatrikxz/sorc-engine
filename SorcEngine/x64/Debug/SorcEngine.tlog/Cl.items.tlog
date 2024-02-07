@@ -1,5 +1,8 @@
-F:\_GraphicsDev\SorcEngine\SorcEngine\src\glad.c;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glad.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\src\Core\GL.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\GL.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\src\Core\Input.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\Input.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\src\Engine.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\Engine.obj
 F:\_GraphicsDev\SorcEngine\SorcEngine\src\Main.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\Main.obj
+F:\_GraphicsDev\SorcEngine\SorcEngine\src\Renderer\Renderer.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\Renderer.obj
 F:\_GraphicsDev\SorcEngine\SorcEngine\vendor\glad\src\glad.c;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glad.obj
 F:\_GraphicsDev\SorcEngine\SorcEngine\vendor\glm\glm\detail\glm.cpp;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glm.obj
 F:\_GraphicsDev\SorcEngine\SorcEngine\vendor\glm\glm\glm.cppm;F:\_GraphicsDev\SorcEngine\SorcEngine\x64\Debug\glm.obj
