@@ -19,7 +19,7 @@
 
 #define NEAR_PLANE 0.005f
 #define FAR_PLANE 50.0f
-#define HELL_PI 3.141592653589793f
+#define SORC_PI 3.141592653589793f
 #define DARK_SQUARE glm::vec3(0.039f,0.38f,0.286f)
 #define LIGHT_SQUARE glm::vec3(0.95703125f, 0.8984375f, 0.74609375f)
 

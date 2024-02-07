@@ -1,107 +1,24 @@
 #include "Renderer.h"
 
+#include "Shader.h"
 #include "../Core/GL.h"
 #include "../Common.h"
 #include "../Util.hpp"
 #include "../Core/Input.h"
 
-/*
-*	Shader
-*
-*	Manages shader compilation, linking, error checking, and uniform setting.
-*	It loads vertex and fragment shaders from files,
-*	compiles them, links them into a shader program,
-*	and stores uniform locations for efficient access.
-*/
-struct Shader {
 
-	int _ID = -1;
-	std::unordered_map<std::string, int> _uniformsLocations;
-
-	int CheckErrors(unsigned int shader, std::string type) 
-	{
-		int success;
-		char infoLog[1024];
-		if (type != "PROGRAM") 
-		{
-			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-			if (!success) 
-			{
-				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "Shader compilation error: " << type << "\n" << infoLog << "\n";
-			}
-		}
-		else 
-		{
-			glGetProgramiv(shader, GL_LINK_STATUS, &success);
-			if (!success) 
-			{
-				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "Shader linking error: " << type << "\n" << infoLog << "\n";
-			}
-		}
-		return success;
-	}
-
-	void Load(std::string vertexPath, std::string fragmentPath) 
-	{
-		std::string vertexSource = Util::ReadTextFromFile("res/shaders/" + vertexPath);
-		std::string fragmentSource = Util::ReadTextFromFile("res/shaders/" + fragmentPath);
-		const char* vShaderCode = vertexSource.c_str();
-		const char* fShaderCode = fragmentSource.c_str();
-		unsigned int vertex, fragment;
-		vertex = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertex, 1, &vShaderCode, NULL);
-		glCompileShader(vertex);
-		CheckErrors(vertex, "VERTEX");
-		fragment = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragment, 1, &fShaderCode, NULL);
-		glCompileShader(fragment);
-		int tempID = glCreateProgram();
-		glAttachShader(tempID, vertex);
-		glAttachShader(tempID, fragment);
-		glLinkProgram(tempID);
-		if (CheckErrors(tempID, "PROGRAM")) 
-		{
-			_uniformsLocations.clear();
-			_ID = tempID;
-		}
-		glDeleteShader(vertex);
-		glDeleteShader(fragment);
-	}
-
-	void Bind() 
-	{
-		glUseProgram(_ID);
-	}
-
-	void SetMat4(const std::string& name, glm::mat4 value) 
-	{
-		if (_uniformsLocations.find(name) == _uniformsLocations.end()) {
-			_uniformsLocations[name] = glGetUniformLocation(_ID, name.c_str());
-		}
-		glUniformMatrix4fv(_uniformsLocations[name], 1, GL_FALSE, &value[0][0]);
-	}
-
-	void SetVec3(const std::string& name, const glm::vec3& value) 
-	{
-		if (_uniformsLocations.find(name) == _uniformsLocations.end()) 
-		{
-			_uniformsLocations[name] = glGetUniformLocation(_ID, name.c_str());
-		}
-		glUniform3fv(_uniformsLocations[name], 1, &value[0]);
-	}
-};
+struct Shaders {
+	Shader solidColor;
+} _shaders;
 
 namespace Renderer 
 {
-	Shader _solidColorshader;
 	GLuint _quadVao = 0;
 }
 
 void Renderer::Init()
 {
-	_solidColorshader.Load("solidcolor.vert", "solidcolor.frag");
+	_shaders.solidColor.Load("solidcolor.vert", "solidcolor.frag");
 }
 
 void Renderer::DrawQuad()
@@ -149,9 +66,9 @@ void Renderer::RenderFrame(glm::mat4 CameraView)
 	glm::mat4 projection = glm::perspective(1.0f, 1920.0f / 1080.0f, NEAR_PLANE, FAR_PLANE);
 	glm::mat4 view = CameraView;
 
-	_solidColorshader.Bind();
-	_solidColorshader.SetMat4("projection", projection);
-	_solidColorshader.SetMat4("view", view);
+	_shaders.solidColor.Use();
+	_shaders.solidColor.SetMat4("projection", projection);
+	_shaders.solidColor.SetMat4("view", view);
 
 	bool lightSquare = true;
 
@@ -161,15 +78,15 @@ void Renderer::RenderFrame(glm::mat4 CameraView)
 
 			Transform gridSquare;
 			gridSquare.position = glm::vec3(x, 0, z);
-			gridSquare.rotation.x = HELL_PI * -0.5f;
+			gridSquare.rotation.x = SORC_PI * -0.5f;
 
-			_solidColorshader.SetMat4("model", gridSquare.to_mat4());
+			_shaders.solidColor.SetMat4("model", gridSquare.to_mat4());
 
 			if (lightSquare) {
-				_solidColorshader.SetVec3("color", LIGHT_SQUARE);
+				_shaders.solidColor.SetVec3("color", LIGHT_SQUARE);
 			}
 			else {
-				_solidColorshader.SetVec3("color", DARK_SQUARE);
+				_shaders.solidColor.SetVec3("color", DARK_SQUARE);
 			}
 			DrawQuad();
 			lightSquare = !lightSquare;
@@ -179,6 +96,6 @@ void Renderer::RenderFrame(glm::mat4 CameraView)
 
 	// Hotload shader
 	if (Input::KeyPressed(GLFW_KEY_H)) {
-		_solidColorshader.Load("solidcolor.vert", "solidcolor.frag");
+		_shaders.solidColor.Load("solidcolor.vert", "solidcolor.frag");
 	}
 }
