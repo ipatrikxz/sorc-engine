@@ -1,10 +1,10 @@
 
 #include "Engine.h"
+
 #include "Core/GL.h"
 #include "Core/Input.h"
-#include "Renderer/Renderer.h"
-#include "Common.h"
 #include "Util.hpp"
+#include "Renderer/Renderer.h"
 
 /*
 *	Game
@@ -49,6 +49,8 @@ namespace Game {
 void Engine::Run()
 {
 	std::cout << "You are you're own worst enemy.\n";
+	std::cout << "Failure is an illusion.\n";
+	std::cout << "Accept no inpass.\n";
 
 	GL::Init(1280, 720, "SorcEngine");
 	Game::Init();

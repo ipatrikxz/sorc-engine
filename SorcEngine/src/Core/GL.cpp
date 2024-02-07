@@ -1,7 +1,6 @@
 
 #include "GL.h"
 
-
 namespace GL {
 	GLFWwindow* _window;
 }

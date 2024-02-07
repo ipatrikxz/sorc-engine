@@ -1,16 +1,9 @@
 #include "Renderer.h"
 
-#include <glm/glm.hpp>
-
 #include "../Core/GL.h"
-#include "../Core/Input.h"
-#include "../Util.hpp"
 #include "../Common.h"
-
-#include <sstream>
-#include <string>
-#include <vector>
-#include <unordered_map>
+#include "../Util.hpp"
+#include "../Core/Input.h"
 
 /*
 *	Shader

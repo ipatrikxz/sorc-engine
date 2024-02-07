@@ -1,7 +1,6 @@
 #pragma once
 
 
-
 namespace Input 
 {
 	void Update();

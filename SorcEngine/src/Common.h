@@ -3,17 +3,19 @@
 #define GLM_FORCE_SILENT_WARNINGS
 #define GLM_ENABLE_EXPERIMENTAL
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <iostream> // Includes the standard I/O stream library. Used for input and output operations, e.g., cout, cin.
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/hash.hpp>
-#include <iostream> // Includes the standard I/O stream library. Used for input and output operations, e.g., cout, cin.
 
-//include <fstream> // Includes the file stream library. Used for file input and output operations, e.g., ifstream, ofstream.
-//include <sstream> // Includes the string stream library. Allows the use of string stream objects, e.g., stringstream, which can be used for parsing and formatting strings.
-//include <string> // Includes the standard string library. Provides the std::string class and functions for string manipulation.
-//include <vector> // Includes the standard vector library. Provides the std::vector template class, a dynamic array that can resize itself automatically.
-//include <unordered_map> // Includes the standard unordered map library. Provides the std::unordered_map template class, a hash table that stores key-value pairs.
+#include <fstream> // Includes the file stream library. Used for file input and output operations, e.g., ifstream, ofstream.
+#include <sstream> // Includes the string stream library. Allows the use of string stream objects, e.g., stringstream, which can be used for parsing and formatting strings.
+#include <string> // Includes the standard string library. Provides the std::string class and functions for string manipulation.
+#include <vector> // Includes the standard vector library. Provides the std::vector template class, a dynamic array that can resize itself automatically.
+#include <unordered_map> // Includes the standard unordered map library. Provides the std::unordered_map template class, a hash table that stores key-value pairs.
 
 #define NEAR_PLANE 0.005f
 #define FAR_PLANE 50.0f
