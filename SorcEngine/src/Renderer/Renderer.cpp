@@ -72,12 +72,22 @@ void Renderer::RenderFrame(glm::mat4 CameraView)
 
 	bool lightSquare = true;
 
-	// grid floor
-	for (int x = 0; x < 8; x++) {
-		for (int z = 0; z < 8; z++) {
+	FTransform gridSquare;
+	gridSquare.location = glm::vec3(0, 0, 0);
+	gridSquare.rotation.x = SORC_PI * -0.5f;
 
-			Transform gridSquare;
-			gridSquare.position = glm::vec3(x, 0, z);
+	_shaders.solidColor.SetMat4("model", gridSquare.to_mat4());
+	_shaders.solidColor.SetVec3("color", LIGHT_SQUARE);
+
+	int gridX = 16;
+	int gridZ = 16;
+
+	// grid floor
+	for (int x = 0; x < gridX; x++) {
+		for (int z = 0; z < gridZ; z++) {
+
+			FTransform gridSquare;
+			gridSquare.location = glm::vec3(x, 0, z);
 			gridSquare.rotation.x = SORC_PI * -0.5f;
 
 			_shaders.solidColor.SetMat4("model", gridSquare.to_mat4());

@@ -18,4 +18,9 @@ namespace Util {
 		}
 		return str;
 	}
+
+	inline bool FileExists(const std::string name) {
+		struct stat buffer;
+		return (stat(name.data(), &buffer) == 0);
+	}
 }

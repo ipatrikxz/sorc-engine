@@ -11,6 +11,7 @@ void GL::Init(int width, int height, std::string title) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+
 	_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 	if (_window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -22,6 +23,9 @@ void GL::Init(int width, int height, std::string title) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return;
 	}
+
+	// Hide the mouse cursor
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 GLFWwindow* GL::GetWindowPointer()
@@ -49,3 +53,4 @@ void GL::Cleanup()
 {
 	glfwTerminate();
 }
+
