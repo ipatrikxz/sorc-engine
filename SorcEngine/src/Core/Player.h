@@ -17,6 +17,8 @@ enum EDirection {
 class Player {
 
 private:
+	glm::vec3 location;
+	
 	double mouseX;
 	double mouseY;
 	double lastMouseX;

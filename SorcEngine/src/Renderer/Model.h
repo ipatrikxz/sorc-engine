@@ -7,6 +7,7 @@
 class Model {
 private:
     std::vector<Mesh> meshes;
+    std::string directory; // Store model directory for texture paths
 
 public:
     Model(const std::string& path);

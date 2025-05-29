@@ -6,16 +6,15 @@
 #include "Input.h"
 #include "GL.h"
 
-Player::Player()
+Player::Player() : 
+	mouseX(0),
+	mouseY(0),
+	lastMouseX(0),
+	lastMouseY(0),
+	mouseOffsetX(0),
+	mouseOffsetY(0), 
+	camera(new Camera())
 {
-	mouseX = 0;
-	mouseY = 0;
-	lastMouseX = 0;
-	lastMouseY = 0;
-	mouseOffsetX = 0;
-	mouseOffsetY = 0;
-
-	camera = new Camera();
 }
 
 void Player::Update(const float& dt)

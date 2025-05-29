@@ -4,7 +4,7 @@
 
 Camera::Camera()
 {
-	postion = glm::vec3(0, 5, 5);
+	position = glm::vec3(0, 5, 5);
 	front = glm::vec3(0, 0, 0);
 	worldUp = glm::vec3(0, 1, 0);
 	yaw = -90.0f;
@@ -22,13 +22,13 @@ void Camera::UpdateCameraVectors()
 	front = glm::normalize(front);
 	right = glm::normalize(glm::cross(front, worldUp));
 	up = glm::normalize(glm::cross(right, front));
-	viewMatrix = glm::lookAt(postion, postion + front, up);
+	viewMatrix = glm::lookAt(position, position + front, up);
 }
 
 void Camera::UpdateMouseInput(const float& dt, const double& offsetX, const double& offsetY)
 {
-	yaw += offsetX * sensitivity;
-	pitch -= offsetY * -sensitivity;
+	yaw += static_cast<glm::float32>(offsetX) * sensitivity;
+	pitch -= static_cast<glm::float32>(offsetY) * -sensitivity;
 
 	if (pitch > 89.0f)	pitch = 89.0f;
 	if (pitch < -89.0f) pitch = -89.0f;
@@ -45,17 +45,17 @@ void Camera::UpdateMouseInput(const float& dt, const double& offsetX, const doub
 void Camera::UpdateKeyboardInput(const float& dt, const int direction)
 {
 	if (direction == 1) // Forward
-		postion += front * speed * dt;
+		position += front * speed * dt;
 	if (direction == 2) // Backward
-		postion -= front * speed * dt;
+		position -= front * speed * dt;
 	if (direction == 3) // Left
-		postion -= right * speed * dt;
+		position -= right * speed * dt;
 	if (direction == 4) // Right
-		postion += right * speed * dt;
+		position += right * speed * dt;
 	if (direction == 5) // Up
-		postion += up * speed * dt;
+		position += up * speed * dt;
 	if (direction == 6) // Down
-		postion -= up * speed * dt;
+		position -= up * speed * dt;
 }
 
 void Camera::UpdateInput(const float& dt, const int direction, const double& offsetX, const double& offsetY)

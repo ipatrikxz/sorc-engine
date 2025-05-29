@@ -1,5 +1,6 @@
 #include "Model.h"
 #include <iostream>
+#include <filesystem>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <../../vendor/tinyobjloader/tiny_obj_loader.h>
@@ -17,15 +18,38 @@ void Model::LoadModel(const std::string& path)
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
 
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str())) {
+    // Store directory for texture paths
+    directory = std::filesystem::path(path).parent_path().string();
+    std::cout << "Loading model: " << path << std::endl;
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str(), directory.c_str())) {
         std::cout << "Failed to load model: " << warn << err << std::endl;
         return;
     }
 
+	// Check for materials on the model
+    if (materials.empty()) {
+        std::cout << "Warning: No materials found in model" << std::endl;
+    }
+
+	// Process each shape in the model
     for (const auto& shape : shapes) {
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
+        std::vector<Texture*> textures;
 
+        // Load textures for the material
+        if (shape.mesh.material_ids.size() > 0 && shape.mesh.material_ids[0] >= 0) {
+            auto& material = materials[shape.mesh.material_ids[0]];
+            if (!material.diffuse_texname.empty()) {
+                std::string texturePath = directory + "/" + material.diffuse_texname;
+				std::cout << "Loading texture: " << texturePath << std::endl;
+                Texture* texture = new Texture(texturePath);
+                textures.push_back(texture);
+            }
+        }
+
+		// Process vertices and indices
         for (const auto& index : shape.mesh.indices) {
             Vertex vertex;
             vertex.position = {
@@ -43,18 +67,15 @@ void Model::LoadModel(const std::string& path)
             if (index.texcoord_index >= 0) {
                 vertex.uv = {
                     attrib.texcoords[2 * index.texcoord_index + 0],
-                    attrib.texcoords[2 * index.texcoord_index + 1]
+                    1.0f - attrib.texcoords[2 * index.texcoord_index + 1] // Flip UV vertically
                 };
             }
-            vertices.push_back(vertex);
 
-            // Fix: Explicitly cast size_t to unsigned int with bounds checking
-            size_t indexCount = indices.size();
-            assert(indexCount <= std::numeric_limits<unsigned int>::max() && "Index count exceeds unsigned int limit");
-            indices.push_back(static_cast<unsigned int>(indexCount));
+            vertices.push_back(vertex);
+            indices.push_back(static_cast<unsigned int>(indices.size()));
         }
 
-        meshes.emplace_back(vertices, indices);
+        meshes.emplace_back(vertices, indices, textures);
     }
 }
 
@@ -64,3 +85,4 @@ void Model::Draw(Shader& shader)
         mesh.Draw(shader);
     }
 }
+

@@ -1,9 +1,12 @@
 #include "Mesh.h"
+#include <cassert>
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures)
 {
     this->vertices = vertices;
     this->indices = indices;
+    this->textures = textures;
     SetupMesh();
 }
 
@@ -28,13 +31,19 @@ void Mesh::SetupMesh()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
     glBindVertexArray(0);
-
 }
 
 void Mesh::Draw(Shader& shader)
 {
     assert(indices.size() <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()) &&
         "Index count exceeds GLsizei limit");
+
+    // Bind textures
+    if (!textures.empty()) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textures[0]->GetID());
+        shader.setInt("texture1", 0); // Bind to texture unit 0
+    }
 
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);

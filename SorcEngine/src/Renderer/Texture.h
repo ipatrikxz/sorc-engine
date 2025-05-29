@@ -1,15 +1,12 @@
 #pragma once
-
-
-#include <iostream>
-#include <memory>
 #include <string>
-#include <string_view>
 
 class Texture {
+private:
+    unsigned int ID;
+
 public:
-
-	explicit Texture(const std::string filepath);
-	bool Load(const std::string filepath);
-
+    Texture(std::string filepath);
+    bool Load(std::string filepath);
+    unsigned int GetID() const { return ID; }
 };

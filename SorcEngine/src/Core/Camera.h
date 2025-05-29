@@ -1,18 +1,13 @@
 #pragma once
 
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <algorithm>
+#include "../Common.h"
 
 class Camera {
 
 private:
 	glm::mat4 viewMatrix;
 
-	glm::vec3 postion;
+	glm::vec3 position;
 	glm::vec3 worldUp;
 
 	glm::vec3 front;
@@ -34,7 +29,7 @@ public:
 	~Camera() {}
 	
 	glm::mat4 GetViewMatrix() {
-		viewMatrix = glm::lookAt(postion, postion + front, up);
+		viewMatrix = glm::lookAt(position, position + front, up);
 		UpdateCameraVectors();
 		return viewMatrix;
 	}
@@ -44,16 +39,24 @@ public:
 	void UpdateKeyboardInput(const float& dt, const int direction);
 	void UpdateInput(const float& dt, const int direction, const double& offsetX, const double& offsetY);
 
+	glm::vec3 GetPosition() const {
+		return position;
+	}
+
+	glm::vec3 GetForwardVector() const { 
+		return front; 
+	}
+
 	float GetSpeed() const {
 		return speed;
 	}
 
 	void SetSpeed(const float& speed) {
-		this->speed = std::clamp(speed, 0.0f, 10.0f);
+		this->speed = std::clamp(speed, MIN_SPEED, MAX_SPEED);
 	}
 
 	void SetFov(const float& fov) {
-		this->fov = std::clamp(fov, 45.0f, 120.f);
+		this->fov = std::clamp(fov, MIN_FOV, MAX_FOV);
 	}
 
 };

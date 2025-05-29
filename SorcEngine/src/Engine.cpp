@@ -14,7 +14,7 @@ namespace Engine
 		std::cout << "Failure is an illusion.\n";
 
 		// Initialize GLFW and OpenGL context
-		GL::Init(1280, 720, "SorcEngine");
+		GL::Init(SORC_WINDOW_WIDTH, SORC_WINDOW_HEIGHT, SORC_WINDOW_TITLE);
 		Game::Init();
 		Renderer::Init();
 

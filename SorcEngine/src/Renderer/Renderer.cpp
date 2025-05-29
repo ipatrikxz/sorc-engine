@@ -18,12 +18,69 @@ namespace Renderer
 
 void Renderer::Init()
 {
+	glEnable(GL_DEPTH_TEST);						// Enable depth testing for 3D rendering
+	glDepthFunc(GL_LESS);							// Set depth function to less than (default)
+	glEnable(GL_CULL_FACE);							// Enable face culling
+	glCullFace(GL_BACK);							// Cull faces 
+	glFrontFace(GL_CCW);							// Front faces are counterclockwise (default)
+	glEnable(GL_STENCIL_TEST);						// Enable stencil testing
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);		// Set stencil operation to keep the current value, keep the current value, and replace it with the new value when a fragment passes the stencil test
+
+	// Load shaders
 	_shaders.solidColor.Load("solidcolor.vert", "solidcolor.frag");
-	_testModel = new Model("res/models/Sphere.obj");
+	
+	// Load models
+	_testModel = new Model("res/models/Cube.obj");
+}
+
+void Renderer::RenderFrame(glm::mat4 CameraView)
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::mat4 projection = glm::perspective(glm::radians(FOV), SORC_ASPECT_RATIO, NEAR_PLANE, FAR_PLANE);
+	glm::mat4 view = CameraView;
+
+	_shaders.solidColor.Use();
+	_shaders.solidColor.SetMat4("projection", projection);
+	_shaders.solidColor.SetMat4("view", view);
+
+	DrawQuad();
+
+	// Draw Model
+	if (_testModel) {
+		Transform modelTransform;
+		modelTransform.location = glm::vec3(0.0f, 1.0f, 0.0f);
+		modelTransform.scale = glm::vec3(1.0f);
+		_shaders.solidColor.SetVec3("color", WHITE);
+		DrawModel(*_testModel, _shaders.solidColor, modelTransform.to_mat4());
+	}
+
+	// Hotload shader
+	if (Input::KeyPressed(GLFW_KEY_H)) {
+		_shaders.solidColor.Load("solidcolor.vert", "solidcolor.frag");
+	}
+}
+
+void Renderer::DrawModel(Model& model, Shader& shader, glm::mat4 transform)
+{
+	glDisable(GL_CULL_FACE);
+	shader.Use();
+	shader.SetMat4("model", transform);
+	model.Draw(shader);
+	glEnable(GL_CULL_FACE);
 }
 
 void Renderer::DrawQuad()
 {
+	Transform largeQuad;
+	largeQuad.location = glm::vec3(0.0f, 0.0f, 0.0f);
+	largeQuad.rotation.x = SORC_PI * -0.5f;
+	largeQuad.scale = glm::vec3(25.0f, 25.0f, 1.0f);
+
+	_shaders.solidColor.SetMat4("model", largeQuad.to_mat4());
+	_shaders.solidColor.SetVec3("color", DARK);
+
 	if (_quadVao == 0) {
 		std::vector<Vertex> vertices;
 		Vertex vert0 = { glm::vec3(-0.5f,  0.5f, 0.0f) };
@@ -35,11 +92,11 @@ void Renderer::DrawQuad()
 		vertices.push_back(vert1);
 		vertices.push_back(vert2);
 		vertices.push_back(vert3);
-		
+
 		std::vector<unsigned int> indices = { 2, 1, 0, 0, 3, 2 };
 		unsigned int VBO;
 		unsigned int EBO;
-		
+
 		glGenVertexArrays(1, &_quadVao);
 		glGenBuffers(1, &VBO);
 		glGenBuffers(1, &EBO);
@@ -60,51 +117,14 @@ void Renderer::DrawQuad()
 	}
 	glBindVertexArray(_quadVao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}
 
-void Renderer::DrawModel(Model& model, Shader& shader, glm::mat4 transform)
-{
-	shader.Use();
-	shader.SetMat4("model", transform);
-	model.Draw(shader);
-}
-
-void Renderer::RenderFrame(glm::mat4 CameraView)
-{
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glm::mat4 projection = glm::perspective(1.0f, 1920.0f / 1080.0f, NEAR_PLANE, FAR_PLANE);
-	glm::mat4 view = CameraView;
-
-	_shaders.solidColor.Use();
-	_shaders.solidColor.SetMat4("projection", projection);
-	_shaders.solidColor.SetMat4("view", view);
-
-	// Single large quad
-	Transform largeQuad;
-	largeQuad.location = glm::vec3(7.5f, 0.0f, 7.5f);
-	largeQuad.rotation.x = SORC_PI * -0.5f; 
-	largeQuad.scale = glm::vec3(16.0f, 16.0f, 1.0f); 
-
-	_shaders.solidColor.SetMat4("model", largeQuad.to_mat4());
-	_shaders.solidColor.SetVec3("color", DARK_SQUARE);
-
-	DrawQuad();
-
-	// Draw Model
-	if (_testModel) {
-		Transform modelTransform;
-		modelTransform.location = glm::vec3(0.0f, 1.0f, 0.0f);
-		modelTransform.scale = glm::vec3(1.0f);
-		_shaders.solidColor.SetVec3("color", RED);
-		DrawModel(*_testModel, _shaders.solidColor, modelTransform.to_mat4());
-	}
-
-	// Hotload shader
-	if (Input::KeyPressed(GLFW_KEY_H)) {
-		_shaders.solidColor.Load("solidcolor.vert", "solidcolor.frag");
-	}
+	// Disable culling for the quad
+	glDisable(GL_CULL_FACE);
+	glBindVertexArray(_quadVao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	// Re-enable culling for other objects
+	glEnable(GL_CULL_FACE);
 }
 
 void Renderer::Cleanup()
