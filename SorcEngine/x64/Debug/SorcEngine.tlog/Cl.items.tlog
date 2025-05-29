@@ -4,6 +4,8 @@ F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Core\Input.cpp;F:\_DEV\_Gr
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Core\Player.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Player.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Engine.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Engine.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Main.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Main.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Mesh.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Mesh.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Model.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Model.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Renderer.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Renderer.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Shader.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Shader.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Texture.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Texture.obj

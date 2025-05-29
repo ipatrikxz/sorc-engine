@@ -56,7 +56,7 @@ struct Vertex {
 *	Represents a 3D transformation with position, rotation, and scale,
 *	converted these properties into a transformation matrix.
 */
-struct FTransform {
+struct Transform {
 	glm::vec3 location = glm::vec3(0);
 	glm::vec3 rotation = glm::vec3(0);
 	glm::vec3 scale = glm::vec3(1);

@@ -6,7 +6,6 @@
 #include "../Util.hpp"
 #include "../Core/Input.h"
 
-
 struct Shaders {
 	Shader solidColor;
 } _shaders;
@@ -14,11 +13,13 @@ struct Shaders {
 namespace Renderer 
 {
 	GLuint _quadVao = 0;
+	Model* _testModel = nullptr;
 }
 
 void Renderer::Init()
 {
 	_shaders.solidColor.Load("solidcolor.vert", "solidcolor.frag");
+	_testModel = new Model("res/models/Sphere.obj");
 }
 
 void Renderer::DrawQuad()
@@ -29,13 +30,16 @@ void Renderer::DrawQuad()
 		Vertex vert1 = { glm::vec3(0.5f,  0.5f, 0.0f) };
 		Vertex vert2 = { glm::vec3(0.5f, -0.5f, 0.0f) };
 		Vertex vert3 = { glm::vec3(-0.5f, -0.5f, 0.0f) };
+
 		vertices.push_back(vert0);
 		vertices.push_back(vert1);
 		vertices.push_back(vert2);
 		vertices.push_back(vert3);
+		
 		std::vector<unsigned int> indices = { 2, 1, 0, 0, 3, 2 };
 		unsigned int VBO;
 		unsigned int EBO;
+		
 		glGenVertexArrays(1, &_quadVao);
 		glGenBuffers(1, &VBO);
 		glGenBuffers(1, &EBO);
@@ -58,6 +62,13 @@ void Renderer::DrawQuad()
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
+void Renderer::DrawModel(Model& model, Shader& shader, glm::mat4 transform)
+{
+	shader.Use();
+	shader.SetMat4("model", transform);
+	model.Draw(shader);
+}
+
 void Renderer::RenderFrame(glm::mat4 CameraView)
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -70,42 +81,37 @@ void Renderer::RenderFrame(glm::mat4 CameraView)
 	_shaders.solidColor.SetMat4("projection", projection);
 	_shaders.solidColor.SetMat4("view", view);
 
-	bool lightSquare = true;
+	// Single large quad
+	Transform largeQuad;
+	largeQuad.location = glm::vec3(7.5f, 0.0f, 7.5f);
+	largeQuad.rotation.x = SORC_PI * -0.5f; 
+	largeQuad.scale = glm::vec3(16.0f, 16.0f, 1.0f); 
 
-	FTransform gridSquare;
-	gridSquare.location = glm::vec3(0, 0, 0);
-	gridSquare.rotation.x = SORC_PI * -0.5f;
+	_shaders.solidColor.SetMat4("model", largeQuad.to_mat4());
+	_shaders.solidColor.SetVec3("color", DARK_SQUARE);
 
-	_shaders.solidColor.SetMat4("model", gridSquare.to_mat4());
-	_shaders.solidColor.SetVec3("color", LIGHT_SQUARE);
+	DrawQuad();
 
-	int gridX = 16;
-	int gridZ = 16;
-
-	// grid floor
-	for (int x = 0; x < gridX; x++) {
-		for (int z = 0; z < gridZ; z++) {
-
-			FTransform gridSquare;
-			gridSquare.location = glm::vec3(x, 0, z);
-			gridSquare.rotation.x = SORC_PI * -0.5f;
-
-			_shaders.solidColor.SetMat4("model", gridSquare.to_mat4());
-
-			if (lightSquare) {
-				_shaders.solidColor.SetVec3("color", LIGHT_SQUARE);
-			}
-			else {
-				_shaders.solidColor.SetVec3("color", DARK_SQUARE);
-			}
-			DrawQuad();
-			lightSquare = !lightSquare;
-		}
-		lightSquare = !lightSquare;
+	// Draw Model
+	if (_testModel) {
+		Transform modelTransform;
+		modelTransform.location = glm::vec3(0.0f, 1.0f, 0.0f);
+		modelTransform.scale = glm::vec3(1.0f);
+		_shaders.solidColor.SetVec3("color", RED);
+		DrawModel(*_testModel, _shaders.solidColor, modelTransform.to_mat4());
 	}
 
 	// Hotload shader
 	if (Input::KeyPressed(GLFW_KEY_H)) {
 		_shaders.solidColor.Load("solidcolor.vert", "solidcolor.frag");
 	}
+}
+
+void Renderer::Cleanup()
+{
+	if (_testModel) {
+		delete _testModel;
+		_testModel = nullptr;
+	}
+	glDeleteVertexArrays(1, &_quadVao);
 }

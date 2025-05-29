@@ -13,17 +13,20 @@ namespace Engine
 		std::cout << "You are you're own worst enemy.\n";
 		std::cout << "Failure is an illusion.\n";
 
+		// Initialize GLFW and OpenGL context
 		GL::Init(1280, 720, "SorcEngine");
 		Game::Init();
 		Renderer::Init();
 
-
+		// Main game loop
 		while (GL::WindowIsOpen()) {
 			Game::Update();
 
 			GL::SwapBuffersPollEvents();
 		}
 
+		// Cleanup
+		Renderer::Cleanup();
 		GL::Cleanup();
 		return;
 	}
