@@ -3,6 +3,7 @@
 
 int main() 
 {
-	Engine::Run();
+	app::Engine app;
+	app.run();
 	return 0;
 }

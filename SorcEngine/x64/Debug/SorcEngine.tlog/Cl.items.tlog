@@ -1,7 +1,8 @@
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Config\Config.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Config.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Core\Camera.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Camera.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Core\GL.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\GL.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Core\Input.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Input.obj
-F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Core\Player.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Player.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Core\UI.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\UI.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Engine.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Engine.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Main.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Main.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Mesh.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Mesh.obj
@@ -9,6 +10,15 @@ F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Model.cpp;F:\_DEV
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Renderer.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Renderer.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Shader.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Shader.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Renderer\Texture.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Texture.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Window\SceneViewport.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\SceneViewport.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\src\Window\Window.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\Window.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\glad\src\glad.c;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\glad.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\glm\glm\detail\glm.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\glm.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\imgui\imgui.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\imgui.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\imgui\imgui_demo.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\imgui_demo.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\imgui\imgui_draw.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\imgui_draw.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\imgui\imgui_impl_glfw.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\imgui_impl_glfw.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\imgui\imgui_impl_opengl3.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\imgui_impl_opengl3.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\imgui\imgui_tables.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\imgui_tables.obj
+F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\imgui\imgui_widgets.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\imgui_widgets.obj
 F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\vendor\stb_image\stb_image.cpp;F:\_DEV\_GraphicsDev\OpenGL\SorcEngine\SorcEngine\x64\Debug\stb_image.obj

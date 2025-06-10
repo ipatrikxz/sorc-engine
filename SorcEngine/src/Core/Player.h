@@ -1,42 +1,40 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "Camera.h"
+
+class Window;
 
 class Camera;
-
-// Enums
-enum EDirection {
-	FORWARD = 1,
-	BACKWARD = 2,
-	LEFT = 3,
-	RIGHT = 4,
-	UP = 5,
-	DOWN = 6
-};
 
 class Player {
 
 private:
+
+	Camera* camera;
+
 	glm::vec3 location;
-	
+
+	/*
+	// Input
 	double mouseX;
 	double mouseY;
 	double lastMouseX;
 	double lastMouseY;
 	double mouseOffsetX;
 	double mouseOffsetY;
-
-	Camera* camera;
+	*/
 
 public:
 
 	Player();
 	~Player() {};
 
+	void Init();
 	void Update(const float& dt);
 	void UpdateKeyboardInput(const float& dt);
 	void UpdateMouseInput();
 
-	glm::mat4 GetViewMatrix();
+	glm::vec3 GetWorldLocation() const { return location; }
+	glm::mat4 GetViewMatrix() const { return camera->GetViewMatrix(); }
 
 };

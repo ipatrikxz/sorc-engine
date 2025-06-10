@@ -15,6 +15,7 @@ Release/
 # Build output
 bin/
 build/
+x64/
 
 # Dependencies
 external/

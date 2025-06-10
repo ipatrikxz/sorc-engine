@@ -21,10 +21,12 @@
 enum class WindowedMode { WINDOWED, FULLSCREEN };
 
 // Constants
-#define SORC_WINDOW_TITLE	"SorcEngine"
-#define SORC_VERSION		"0.1.0"
-#define SORC_WINDOW_WIDTH	1920
-#define SORC_WINDOW_HEIGHT	1080
+#define APP_NAME			"Sorcery Engine"
+#define APP_WINDOW_TITLE	"SorcEngine"
+#define APP_VERSION			"0.0.1"
+
+#define SORC_WINDOW_WIDTH	1280
+#define SORC_WINDOW_HEIGHT	720
 #define SORC_ASPECT_RATIO	(1280.0f / 720.0f)
 #define SORC_PI				3.141592653589793f
 #define SORC_HALF_PI		1.57079632679f
@@ -51,6 +53,8 @@ enum class WindowedMode { WINDOWED, FULLSCREEN };
 #define LIGHT_RED			glm::vec3(0.8f, 0.05f, 0.05f)
 #define DARK				glm::vec3(0.039f,0.38f,0.286f)
 #define LIGHT				glm::vec3(0.95703125f, 0.8984375f, 0.74609375f)
+
+
 
 /*
 *	Vertex

@@ -1,11 +1,10 @@
 
 #include "Texture.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include "../Util.hpp"
 #include <iostream>
-#include "../../vendor/stb_image/stb_image.h"
+#include <glad/glad.h>
+#include "stb_image.h"
+#include "Util.hpp"
 
 Texture::Texture(std::string filepath)
 {
@@ -36,10 +35,10 @@ bool Texture::Load(std::string filepath)
         GLenum format = nrChannels == 3 ? GL_RGB : GL_RGBA;
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-        std::cout << "Texture loaded successfully: " << filepath << " (" << width << "x" << height << ")" << std::endl;
+        std::cout << "Texture loaded: " << filepath << " (" << width << "x" << height << ")" << std::endl;
     }
     else {
-        std::cout << "Failed to load texture data: " << filepath << " (stb_image error: " << stbi_failure_reason() << ")" << std::endl;
+        std::cout << "Texture loading failed: " << filepath << " (stb_image error: " << stbi_failure_reason() << ")" << std::endl;
         stbi_image_free(data);
         return false;
     }

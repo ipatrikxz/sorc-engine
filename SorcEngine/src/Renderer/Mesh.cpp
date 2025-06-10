@@ -1,6 +1,9 @@
 #include "Mesh.h"
 #include <cassert>
 
+#include "Shader.h"
+#include "Texture.h"
+#include "Common.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures)
 {

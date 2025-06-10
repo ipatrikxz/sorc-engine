@@ -1,19 +1,20 @@
-# SorcEngine Example
+# SorcEngine
 
-A custom OpenGL-based graphics engine with model loading.
+A lightweight 3D engine built with OpenGL, GLFW, and GLM.
 
-## Prerequisites
+## Features
 
-- Visual Studio 2022
-- CMake (optional, if using)
-- Libraries: GLFW, GLAD, tinyobjloader (included in `external/`)
+- 3D model loading using tinyobjloader
+- Texture support with stb_image
+- Camera system with WASD movement and mouse look
+- Shader-based rendering with hot-reloading
+- basic rendering pipeline.
 
-## Build Instructions
+## Libraries
 
-1. Clone the repo: `git clone https://github.com/your-username/SorcEngine.git`
-2. Open `SorcEngine.sln` in Visual Studio.
-3. Build for Debug/Release.
-
-## Running
-
-- Press WASD to move, mouse to look, ESC to exit.
+- glad
+- GLFW
+- glm
+- tinyobjloader
+- imGui
+- stb_image

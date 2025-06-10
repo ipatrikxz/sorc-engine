@@ -1,10 +1,10 @@
 #pragma once
 
-#include <glm/glm.hpp>
 #include <vector>
-#include "Shader.h"
-#include "../Common.h"
-#include "Texture.h"
+#include "Common.h"
+
+class Texture;
+class Shader;
 
 class Mesh {
 private:

@@ -1,9 +1,13 @@
 #include "Model.h"
+
 #include <iostream>
 #include <filesystem>
+#include "Texture.h"
+#include "Shader.h"
 
+// Include tinyobjloader 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <../../vendor/tinyobjloader/tiny_obj_loader.h>
+#include <tiny_obj_loader.h>
 
 
 Model::Model(const std::string& path)
@@ -29,7 +33,8 @@ void Model::LoadModel(const std::string& path)
 
 	// Check for materials on the model
     if (materials.empty()) {
-        std::cout << "Warning: No materials found in model" << std::endl;
+        std::cout << "Warning: No materials found in model: " << directory << std::endl;
+		return;
     }
 
 	// Process each shape in the model
@@ -41,6 +46,8 @@ void Model::LoadModel(const std::string& path)
         // Load textures for the material
         if (shape.mesh.material_ids.size() > 0 && shape.mesh.material_ids[0] >= 0) {
             auto& material = materials[shape.mesh.material_ids[0]];
+
+			// Load diffuse texture if it exists
             if (!material.diffuse_texname.empty()) {
                 std::string texturePath = directory + "/" + material.diffuse_texname;
 				std::cout << "Loading texture: " << texturePath << std::endl;
@@ -67,7 +74,7 @@ void Model::LoadModel(const std::string& path)
             if (index.texcoord_index >= 0) {
                 vertex.uv = {
                     attrib.texcoords[2 * index.texcoord_index + 0],
-                    1.0f - attrib.texcoords[2 * index.texcoord_index + 1] // Flip UV vertically
+					1.0f - attrib.texcoords[2 * index.texcoord_index + 1] // flip UV coordinates
                 };
             }
 
