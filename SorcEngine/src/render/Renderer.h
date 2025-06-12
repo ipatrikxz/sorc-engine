@@ -1,7 +1,8 @@
 #pragma once
+
 #include "RenderBase.h"
 
-struct GLFWwindow;
+class RenderWindow;
 
 namespace render 
 {
@@ -10,7 +11,7 @@ namespace render
     
     public:
 
-        bool initialize(void* windowHandle) override;
+        bool init(window::RenderWindow& windowHandle) override;
         void preRender() override;
         void postRender() override;
         void destroy() override;

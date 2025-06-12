@@ -19,25 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Config\Config.cpp" />
-    <ClCompile Include="src\Core\Camera.cpp">
+    <ClCompile Include="src\core\Camera.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vendor\GLFW\include;vendor\glad\include;vendor\glm\glm;vendor\imgui;vendor\stb_image;vendor\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vendor\GLFW\include;vendor\glad\include;vendor\glm\glm;vendor\imgui;vendor\stb_image;vendor\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <ClCompile Include="src\Core\GL.cpp" />
-    <ClCompile Include="src\Core\Input.cpp" />
-    <ClCompile Include="src\Core\UI.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Renderer\Mesh.cpp" />
-    <ClCompile Include="src\Renderer\Model.cpp" />
-    <ClCompile Include="src\Renderer\Renderer.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vendor\GLFW\include;vendor\glad\include;vendor\glm\glm;vendor\imgui;vendor\stb_image;vendor\tinyobjloader</AdditionalIncludeDirectories>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Renderer\Texture.cpp" />
-    <ClCompile Include="src\Window\SceneViewport.cpp" />
-    <ClCompile Include="src\Window\Window.cpp" />
+    <ClCompile Include="src\render\Mesh.cpp" />
+    <ClCompile Include="src\render\Model.cpp" />
+    <ClCompile Include="src\render\Shader.cpp" />
+    <ClCompile Include="src\render\Texture.cpp" />
+    <ClCompile Include="src\render\FrameBuffer.cpp" />
+    <ClCompile Include="src\input\InputManager.cpp" />
+    <ClCompile Include="src\render\Renderer.cpp" />
+    <ClCompile Include="src\render\VertexBuffer.cpp" />
+    <ClCompile Include="src\ui\EditorPanel.cpp" />
+    <ClCompile Include="src\ui\UIContext.cpp" />
+    <ClCompile Include="src\ui\Scene.cpp" />
+    <ClCompile Include="src\ui\SceneView.cpp" />
+    <ClCompile Include="src\window\Window.cpp" />
     <ClCompile Include="vendor\glad\src\glad.c" />
     <ClCompile Include="vendor\glm\glm\detail\glm.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
@@ -51,21 +51,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
-    <ClInclude Include="src\Config\Config.h" />
-    <ClInclude Include="src\Core\Camera.h" />
-    <ClInclude Include="src\Core\GL.h" />
-    <ClInclude Include="src\Core\Input.h" />
-    <ClInclude Include="src\Core\UI.h" />
+    <ClInclude Include="src\core\Camera.h" />
     <ClInclude Include="src\Engine.h" />
-    <ClInclude Include="src\Renderer\Mesh.h" />
-    <ClInclude Include="src\Renderer\Model.h" />
-    <ClInclude Include="src\Renderer\Renderer.h" />
-    <ClInclude Include="src\Renderer\Shader.h" />
-    <ClInclude Include="src\Renderer\Texture.h" />
+    <ClInclude Include="src\render\Mesh.h" />
+    <ClInclude Include="src\render\Model.h" />
+    <ClInclude Include="src\render\Shader.h" />
+    <ClInclude Include="src\render\Texture.h" />
     <ClInclude Include="src\Renderer\Window.h" />
+    <ClInclude Include="src\render\FrameBuffer.h" />
+    <ClInclude Include="src\input\InputManager.h" />
+    <ClInclude Include="src\render\RenderBase.h" />
+    <ClInclude Include="src\render\Renderer.h" />
+    <ClInclude Include="src\render\VertexBuffer.h" />
+    <ClInclude Include="src\ui\EditorPanel.h" />
+    <ClInclude Include="src\ui\UIContext.h" />
     <ClInclude Include="src\Util.hpp" />
-    <ClInclude Include="src\Window\SceneViewport.h" />
-    <ClInclude Include="src\Window\Window.h" />
+    <ClInclude Include="src\ui\Scene.h" />
+    <ClInclude Include="src\ui\SceneView.h" />
+    <ClInclude Include="src\window\Window.h" />
+    <ClInclude Include="vendor\3rdparty\plugins\imgui\imfilebrowser.h" />
     <ClInclude Include="vendor\glad\include\glad\glad.h" />
     <ClInclude Include="vendor\glad\include\KHR\khrplatform.h" />
     <ClInclude Include="vendor\GLFW\include\GLFW\glfw3.h" />
@@ -610,8 +614,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;vendor\GLFW\include;vendor\GLFW\lib;vendor\glad\include;vendor\glm\;vendor\imgui;vendor\stb_image;vendor\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>src;vendor\GLFW\include;vendor\GLFW\lib;vendor\glad\include;vendor\glm\;vendor\imgui;vendor\3rdparty\plugins\imgui;vendor\stb_image;vendor\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp23</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

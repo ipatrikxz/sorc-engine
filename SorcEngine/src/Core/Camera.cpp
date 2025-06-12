@@ -1,17 +1,18 @@
 
 #include "Camera.h"
 
-Camera::Camera(const glm::vec3& in_location, float in_yaw, float in_pitch)
+Camera::Camera()
 {
-	location = in_location;
-	front = glm::vec3(1.0f, 0.0f, 0.0f);
+	location = glm::vec3(0.0f, 2.0f, -2.0f);
+	front = glm::vec3(0.0f, 0.0f, 1.0f);
 	worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	yaw = in_yaw;
-	pitch = in_pitch;
+	yaw = 0.0f;
+	pitch = -30.0f;
 	roll = 0.0f;
 	speed = 2.5f;
 	maxSpeed = 15.0f;
 	sensitivity = 0.1f;
+	projection = glm::perspective(glm::radians(FOV), aspectRatio, NEAR_PLANE, FAR_PLANE);
 	UpdateCameraVectors();
 }
 
@@ -23,7 +24,7 @@ void Camera::UpdateCameraVectors()
 	viewMatrix = glm::lookAt(location, location + front, up);
 }
 
-void Camera::UpdateMouseInput(const double& offsetX, const double& offsetY)
+void Camera::mouseLook(const double& offsetX, const double& offsetY)
 {
 	yaw += static_cast<glm::float32>(offsetX) * sensitivity;
 	pitch -= static_cast<glm::float32>(offsetY) * -sensitivity;
@@ -40,7 +41,7 @@ void Camera::UpdateMouseInput(const double& offsetX, const double& offsetY)
 	up = glm::normalize(glm::cross(right, front));
 }
 
-void Camera::UpdateKeyboardInput(const float& dt, const int direction)
+void Camera::moveCamera(const float& dt, const int direction)
 {
 	if (direction == 1) // Forward
 		location += front * speed * dt;
@@ -56,3 +57,50 @@ void Camera::UpdateKeyboardInput(const float& dt, const int direction)
 		location -= up * speed * dt;
 }
 
+void Camera::setAspectRatio(float aspect)
+{
+	aspectRatio = aspect;
+	projection = glm::perspective(glm::radians(FOV), aspectRatio, NEAR_PLANE, FAR_PLANE);
+}
+
+void Camera::moveForward(float delta)
+{
+	location += front * speed * delta;
+}
+
+void Camera::moveBackward(float delta)
+{
+	location -= front * speed * delta;
+}
+
+void Camera::moveRight(float delta)
+{
+	location += right * speed * delta;
+}
+
+void Camera::moveLeft(float delta)
+{
+	location -= right * speed * delta;
+}
+
+void Camera::moveUp(float delta)
+{
+	location += up * speed * delta;
+}
+
+void Camera::moveDown(float delta)
+{
+	location -= up * speed * delta;
+}
+
+glm::mat4 Camera::getViewMatrix()
+{
+	viewMatrix = glm::lookAt(location, location + front, up);
+	UpdateCameraVectors();
+	return viewMatrix;
+}
+
+glm::vec3 Camera::getLocation() const
+{
+	return location;
+}

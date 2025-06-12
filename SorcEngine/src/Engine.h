@@ -1,12 +1,13 @@
 #pragma once
 
-#include "window/RenderWindow.h"
+#include <string>
+
+#include "window/Window.h"
+#include "input/InputManager.h"
 #include "render/Renderer.h"
 #include "ui/UIContext.h"
-#include "scene/Scene.h"
-#include "input/InputManager.h"
+#include "ui/Scene.h"
 
-#include <string>
 
 namespace app 
 {
@@ -19,17 +20,17 @@ namespace app
         ~Engine();
         
         void run();
+        void showToastMessage();
 
     private:
 
         window::RenderWindow window;
         render::Renderer renderer;
-        ui::UIContext uiContext;
 
         // components
-        scene::Scene scene;
+        ui::UIContext uiContext;
         input::InputManager inputManager;
 
-        bool initialize(int width, int height, const std::string& title);
+        bool init(int width, int height, const std::string& title);
     };
 }

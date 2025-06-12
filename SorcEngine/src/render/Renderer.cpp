@@ -5,14 +5,17 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "window/Window.h"
+
 namespace render 
 {
 
-    bool Renderer::initialize(void* windowHandle) 
+    bool Renderer::init(window::RenderWindow& windowHandle)
     {
-        glfwMakeContextCurrent(static_cast<GLFWwindow*>(windowHandle));
+        glfwMakeContextCurrent((GLFWwindow*)windowHandle.getNativeWindow());
        
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) 
+        {
             throw std::runtime_error("Failed to initialize GLAD");
             return false;
         }
@@ -21,6 +24,7 @@ namespace render
         glDepthFunc(GL_LESS);
         return true;
     }
+
 
     void Renderer::preRender() {
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);

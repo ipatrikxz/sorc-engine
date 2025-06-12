@@ -1,17 +1,22 @@
 #pragma once
 
-#include "render/Vertex.hpp"
-#include <vector>
+#include "util.hpp"
+#include "window/Window.h"
+
+// TODO - Comment more
+
+class RenderWindow;
 
 namespace render 
 {
-    class VertexBuffer 
+    // Vertex Buffer interface
+    class IVertexBuffer 
     {
 
     public:
 
-        virtual ~VertexBuffer() = default;
-        virtual void create(const std::vector<scene::Vertex>& vertices, const std::vector<unsigned int>& indices) = 0;
+        virtual ~IVertexBuffer() = default;
+        virtual void create(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) = 0;
         virtual void destroy() = 0;
         virtual void bind() = 0;
         virtual void unbind() = 0;
@@ -24,12 +29,13 @@ namespace render
         unsigned int ibo = 0;
     };
 
-    class FrameBuffer 
+    // Frame Buffer interface
+    class IFrameBuffer 
     {
-    
+
     public:
         
-        virtual ~FrameBuffer() = default;
+        virtual ~IFrameBuffer() = default;
         virtual void create(int width, int height) = 0;
         virtual void destroy() = 0;
         virtual void bind() = 0;
@@ -45,13 +51,14 @@ namespace render
         int height = 0;
     };
 
+    // Render Context
     class RenderContext 
     {
    
     public:
         
         virtual ~RenderContext() = default;
-        virtual bool initialize(void* windowHandle) = 0;
+        virtual bool init(window::RenderWindow& windowHandle) = 0;
         virtual void preRender() = 0;
         virtual void postRender() = 0;
         virtual void destroy() = 0;

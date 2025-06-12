@@ -6,58 +6,48 @@ class Camera {
 
 public:
 
-	Camera(const glm::vec3& in_location, float in_yaw, float in_pitch);
+	Camera();
 	~Camera() {}
 
 	void UpdateCameraVectors();
-	void UpdateMouseInput(const double& offsetX, const double& offsetY);
-	void UpdateKeyboardInput(const float& dt, const int direction);
 
-	glm::mat4 GetViewMatrix() {
-		viewMatrix = glm::lookAt(location, location + front, up);
-		UpdateCameraVectors();
-		return viewMatrix;
-	}
+	// input
+	void mouseLook(const double& offsetX, const double& offsetY);
+	void moveCamera(const float& delta, const int direction);
 
-	glm::vec3 GetPosition() const {
-		return location;
-	}
+	void moveForward(float delta);
+	void moveBackward(float delta);
+	void moveRight(float delta);
+	void moveLeft(float delta);
+	void moveUp(float delta);
+	void moveDown(float delta);
 
-	glm::vec3 GetForwardVector() const {
-		return front;
-	}
+	void setAspectRatio(float aspect);
 
-	float GetSpeed() const {
-		return speed;
-	}
-
-	void SetSpeed(const float& speed) {
-		this->speed = std::clamp(speed, MIN_SPEED, MAX_SPEED);
-	}
-
-	void SetFov(const float& fov) {
-		this->fov = std::clamp(fov, MIN_FOV, MAX_FOV);
-	}
+	glm::mat4 getProjectionMatrix() { return projection; }
+	glm::mat4 getViewMatrix();
+	glm::vec3 getLocation() const;
 
 private:
-	glm::mat4 viewMatrix;
 
 	glm::vec3 location;
-	glm::vec3 worldUp;
 
 	glm::vec3 front;
 	glm::vec3 right;
 	glm::vec3 up;
+	glm::vec3 worldUp;
 
-	glm::float32 yaw;
-	glm::float32 pitch;
-	glm::float32 roll;
+	float yaw;
+	float pitch;
+	float roll;
+	float fov;
+	float speed;
+	float maxSpeed;
+	float sensitivity;
 
-	glm::float32 fov;
-	glm::float32 speed;
-	glm::float32 maxSpeed;
-	glm::float32 sensitivity;
-
-
+	glm::mat4 viewMatrix;
+	glm::mat4 projection;
+	
+	float aspectRatio;
 
 };

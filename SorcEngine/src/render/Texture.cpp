@@ -1,10 +1,9 @@
+#pragma once
 
 #include "Texture.h"
 
-#include <iostream>
-#include <glad/glad.h>
-#include "stb_image.h"
 #include "Util.hpp"
+#include "stb_image.h"
 
 Texture::Texture(std::string filepath)
 {
