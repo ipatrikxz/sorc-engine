@@ -1,5 +1,7 @@
 
 #include "SceneView.h"
+#include "Scene.h"
+#include "core/Camera.h"
 #include <imgui.h>
 
 namespace ui 

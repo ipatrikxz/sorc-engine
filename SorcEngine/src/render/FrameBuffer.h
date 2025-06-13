@@ -11,13 +11,12 @@ namespace render
 
         // IFrameBuffer interface
         void create(int width, int height) override;
-        void destroy() override;
         void bind() override;
         void unbind() override;
+        void destroy() override;
+        unsigned int getTexture() override;
 
         void resize(int width, int height);
-        
-        unsigned int getTexture() override;
     };
 
 }

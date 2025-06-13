@@ -7,12 +7,10 @@
 #include "imgui.h"
 #include <imfilebrowser.h>
 
-namespace ui {
-	class Scene;
-}
-
 namespace ui
 {
+	class Scene;
+
 	class EditorPanel
 	{
 
@@ -21,8 +19,9 @@ namespace ui
 		{
 			currentFile = "< ... >";
 
-			fileDialog.SetTitle("title");
+			fileDialog.SetTitle("File import dialog window");
 			fileDialog.SetTypeFilters({ ".obj", ".fbx" });
+			fileDialog.SetDirectory("res/models/");
 
 			shaderColor = glm::vec3(1, 1, 1);
 		}

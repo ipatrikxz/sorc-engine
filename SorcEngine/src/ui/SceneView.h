@@ -1,9 +1,8 @@
 #pragma once
 
-#include "render/Model.h"
-#include "render/Shader.h"
 #include "render/FrameBuffer.h"
-#include "Scene.h"
+
+namespace ui { class Scene; }
 
 /* 
 * Viewport is a ui component 

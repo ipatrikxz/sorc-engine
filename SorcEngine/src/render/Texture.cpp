@@ -12,7 +12,7 @@ Texture::Texture(std::string filepath)
 
 bool Texture::Load(std::string filepath)
 {
-    if (!Util::FileExists(filepath)) {
+    if (!fileUtil::FileExists(filepath)) {
         std::cout << "Texture file does not exist: " << filepath << std::endl;
         return false;
     }

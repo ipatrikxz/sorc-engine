@@ -3,12 +3,19 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
 
 namespace window 
 {
     RenderWindow::RenderWindow() :
         windowHandle(nullptr),
-        isRunning(false)
+        isRunning(false),
+		width(800),
+        height(600),
+        title("SorcEngine Window"),
+        resizeCallback(nullptr),
+		keyCallback(nullptr)
     {}
 
     RenderWindow::~RenderWindow() 
@@ -18,9 +25,9 @@ namespace window
 
     bool RenderWindow::init(int width, int height, const std::string& title) 
     {
+        this->title = title;
         this->width = width;
         this->height = height;
-        this->title = title;
 
         if (!glfwInit()) 
         {
@@ -101,19 +108,20 @@ namespace window
 
     void RenderWindow::setShouldClose()
     {
-        isRunning = false;
-        glfwTerminate();
+        if (windowHandle)
+        {
+            glfwSetWindowShouldClose(windowHandle, GLFW_TRUE);
+        }
     }
 
     void RenderWindow::cleanup()
     {
-        if (windowHandle)
+        glfwDestroyWindow(windowHandle);
+        windowHandle = nullptr;
+
+        if (glfwGetCurrentContext() != nullptr)
         {
-            glfwDestroyWindow(windowHandle);
             glfwTerminate();
         }
-
-        windowHandle = nullptr;
-        isRunning = false;
     }
 }

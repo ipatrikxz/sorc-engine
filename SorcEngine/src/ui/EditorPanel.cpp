@@ -1,6 +1,8 @@
 #pragma once
 
 #include "EditorPanel.h"
+
+#include "Util.hpp"
 #include <functional>
 #include "Scene.h"
 
@@ -8,8 +10,18 @@ namespace ui
 {
     void EditorPanel::render(Scene& scene)
     {
-        std::shared_ptr shader = scene.getActiveShader();
+        Shader* shader = scene.getActiveShader();
+        Mesh* mesh = scene.getActiveMesh();
 
+        if (!shader)
+        {
+            ImGui::Begin("Properties");
+            ImGui::Text("No active shader!");
+            ImGui::End();
+            return;
+        }
+
+		// Import Mesh dialog
         ImGui::Begin("Properties");
         if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
         {
@@ -22,21 +34,48 @@ namespace ui
             ImGui::Text(currentFile.c_str());
         }
 
-        if (ImGui::CollapsingHeader("Material") && shader)
+		// Display mesh properties if a mesh is selected
+        if (ImGui::CollapsingHeader("Material") && mesh && shader) 
         {
-            ImGui::ColorPicker3("Color", (float*)&shaderColor, ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_DisplayRGB);
-            //ImGui::SliderFloat("Roughness", &mesh->mRoughness, 0.0f, 1.0f);
-            //ImGui::SliderFloat("Metallic", &mesh->mMetallic, 0.0f, 1.0f);
-            shader->setVec3("color", shaderColor);
+            sMaterial material = mesh->getMaterial();
+
+            if (ImGui::ColorPicker3("Color", (float*)&material.color, ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_DisplayRGB)) 
+            {
+                mesh->setMaterial(material);
+            }
+
+            if (ImGui::SliderFloat("Roughness", &material.roughness, 0.0f, 1.0f)) 
+            {
+                mesh->setMaterial(material);
+            }
+
+            if (ImGui::SliderFloat("Metallic", &material.metallic, 0.0f, 1.0f)) 
+            {
+                mesh->setMaterial(material);
+            }
+
+            if (ImGui::SliderFloat("Ambient Occlusion", &material.ao, 0.0f, 1.0f))
+            {
+                mesh->setMaterial(material);
+            }
+
         }
 
-        if (ImGui::CollapsingHeader("Light"))
+        if (ImGui::CollapsingHeader("Camera"))
         {
+            ImGui::Separator();
+            ImGui::Text("Location");
+            ImGui::Separator();
+			ImGui::Text("X: %.2f", scene.getCamera()->getLocation().x);
+			ImGui::Text("Y: %.2f", scene.getCamera()->getLocation().y);
+			ImGui::Text("Z: %.2f", scene.getCamera()->getLocation().z);
 
             ImGui::Separator();
-            ImGui::Text("Position");
+            ImGui::Text("Rotation");
             ImGui::Separator();
-            //nimgui::draw_vec3_widget("Position", scene_view->get_light()->mPosition, 80.0f);
+            ImGui::Text("Pitch: %.2f", scene.getCamera()->getRotation().x);
+            ImGui::Text("Yaw: %.2f", scene.getCamera()->getRotation().y);
+            ImGui::Text("Roll: %.2f", scene.getCamera()->getRotation().z);
         }
 
         ImGui::End();

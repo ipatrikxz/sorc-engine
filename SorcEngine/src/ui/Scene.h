@@ -1,17 +1,16 @@
 #pragma once
 
-#include "render/Shader.h"
-#include "render/Model.h"
+#include "Util.hpp"
 #include "core/Camera.h"
+#include "render/Mesh.h"
 //#include "Light.h"
 
-class Camera;
+class Shader;
 
 namespace ui 
 {
 
-    class Scene
-    {
+    class Scene {
 
     public:
         
@@ -19,30 +18,36 @@ namespace ui
         
         void init();
         void render();
-        void drawModel(render::Model& model, Shader& shader, glm::mat4 transform);
-        void loadModel(const std::string& filepath);
+        void loadMesh(const std::string& filepath);
 
-        void setupFloor();
-        void drawFloor();
-
-        //std::shared_ptr<Light> getLight() { return light; }
-        
-        std::shared_ptr<Camera> getCamera() { return camera; }
-        std::shared_ptr<render::Model> getActiveModel() { return activeModel; }
-        std::shared_ptr<Shader> getActiveShader() { return activeShader; }
+        Camera* getCamera() { return camera.get(); }
+        Shader* getActiveShader() { return activeShader.get(); }
+        Mesh* getActiveMesh() { return activeMesh.get(); }
 
     private:
 
-        GLuint floorVAO = 0;
-        
+        void setupFloor();
+
+        void drawMesh();
+        void drawFloor();
+
+		// camera
         std::shared_ptr<Camera> camera;
         
-        //std::shared_ptr<Light> light;
+		sTransform meshTransform;
 
-        std::shared_ptr<render::Model> activeModel;
-        Transform modelTransform;
-        
+        // mesh
+        std::shared_ptr<Mesh> activeMesh;
         std::shared_ptr<Shader> activeShader;
+
+        // floor
+        GLuint floorVAO;
+        sTransform floorTransform;
+        std::shared_ptr<Shader> floorShader;
+
+		glm::vec3 lightPosition;
+		glm::vec3 lightColor;
+
     };
 
 }

@@ -3,6 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "window/Window.h"
 #include "SceneView.h"
+#include "Scene.h"
 #include "EditorPanel.h"
 
 namespace ui 
@@ -14,7 +15,7 @@ namespace ui
     public:
     
         UIContext();
-        ~UIContext();
+        ~UIContext() = default;
 
         bool init(window::RenderWindow& window);
         void preRender();
@@ -27,8 +28,10 @@ namespace ui
 
     private:
         
+        // window
         std::unique_ptr<SceneView> sceneView;
 
+		// ui elements
         std::unique_ptr<Scene> scene;
         std::unique_ptr<EditorPanel> editorPanel;
 

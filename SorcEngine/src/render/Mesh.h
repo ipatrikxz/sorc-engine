@@ -2,32 +2,46 @@
 
 #include "Util.hpp"
 
-class Texture;
-class Shader;
+#include <assimp/scene.h>
 
-namespace render {
-class Mesh 
-{
+class Shader;
+class Texture;
+
+class Mesh {
 
 public:
 
-    Mesh(std::vector<Vertex> vertices, 
-        std::vector<unsigned int> indices, 
-        std::vector<Texture*> textures = {}
-    );
-    
+    Mesh();
+    ~Mesh();
+
+    bool load(const std::string& path);
     void draw(Shader& shader);
-    void SetupMesh();
+
+    const sMaterial& getMaterial() const { return material; }
+    void setMaterial(const sMaterial& mat) { material = mat; }
+
+	const std::vector<sVertex>& getVertices() const { return vertices; }
+    const std::vector<unsigned int>& getIndices() const { return indices; }
+    const std::vector<Texture*>& getTextures() const { return textures; }
+    const sTransform& getTransform() const { return transform; }
+	const std::string& getName() const { return name; }
+	const std::string& getDirectory() const { return directory; }
+
+	void setTransform(const sTransform transform) { this->transform = transform; }
 
 private:
 
-    unsigned int vbo;
-    unsigned int vao;
-    unsigned int ebo;
+    void setupMesh();
+    
+    sTransform transform;
+    sMaterial material;
 
-    std::vector<Vertex> vertices;
+    std::vector<sVertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures;
 
+	std::string name;
+    std::string directory;
+
+    unsigned int vao = 0;
 };
-}

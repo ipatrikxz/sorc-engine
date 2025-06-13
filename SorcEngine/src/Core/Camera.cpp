@@ -1,19 +1,24 @@
 
 #include "Camera.h"
 
+#include "glm/glm.hpp"
+
 Camera::Camera()
 {
-	location = glm::vec3(0.0f, 2.0f, -2.0f);
+	location = glm::vec3(0.0f, 1.0f, -5.0f);
 	front = glm::vec3(0.0f, 0.0f, 1.0f);
 	worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	yaw = 0.0f;
-	pitch = -30.0f;
+	
+	yaw = 90.0f;
+	pitch = 0.0f;
 	roll = 0.0f;
 	speed = 2.5f;
 	maxSpeed = 15.0f;
 	sensitivity = 0.1f;
 	projection = glm::perspective(glm::radians(FOV), aspectRatio, NEAR_PLANE, FAR_PLANE);
+	
 	UpdateCameraVectors();
+	lookCamera(0.0, 0.0);
 }
 
 void Camera::UpdateCameraVectors()
@@ -24,7 +29,7 @@ void Camera::UpdateCameraVectors()
 	viewMatrix = glm::lookAt(location, location + front, up);
 }
 
-void Camera::mouseLook(const double& offsetX, const double& offsetY)
+void Camera::lookCamera(const double& offsetX, const double& offsetY)
 {
 	yaw += static_cast<glm::float32>(offsetX) * sensitivity;
 	pitch -= static_cast<glm::float32>(offsetY) * -sensitivity;
@@ -41,56 +46,15 @@ void Camera::mouseLook(const double& offsetX, const double& offsetY)
 	up = glm::normalize(glm::cross(right, front));
 }
 
-void Camera::moveCamera(const float& dt, const int direction)
+void Camera::moveCamera(const float& dt, const glm::vec3 direction)
 {
-	if (direction == 1) // Forward
-		location += front * speed * dt;
-	if (direction == 2) // Backward
-		location -= front * speed * dt;
-	if (direction == 3) // Left
-		location -= right * speed * dt;
-	if (direction == 4) // Right
-		location += right * speed * dt;
-	if (direction == 5) // Up
-		location += up * speed * dt;
-	if (direction == 6) // Down
-		location -= up * speed * dt;
+	location += direction * speed * dt;
 }
 
 void Camera::setAspectRatio(float aspect)
 {
 	aspectRatio = aspect;
 	projection = glm::perspective(glm::radians(FOV), aspectRatio, NEAR_PLANE, FAR_PLANE);
-}
-
-void Camera::moveForward(float delta)
-{
-	location += front * speed * delta;
-}
-
-void Camera::moveBackward(float delta)
-{
-	location -= front * speed * delta;
-}
-
-void Camera::moveRight(float delta)
-{
-	location += right * speed * delta;
-}
-
-void Camera::moveLeft(float delta)
-{
-	location -= right * speed * delta;
-}
-
-void Camera::moveUp(float delta)
-{
-	location += up * speed * delta;
-}
-
-void Camera::moveDown(float delta)
-{
-	location -= up * speed * delta;
 }
 
 glm::mat4 Camera::getViewMatrix()
@@ -100,7 +64,3 @@ glm::mat4 Camera::getViewMatrix()
 	return viewMatrix;
 }
 
-glm::vec3 Camera::getLocation() const
-{
-	return location;
-}

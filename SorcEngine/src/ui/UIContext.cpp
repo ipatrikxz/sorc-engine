@@ -4,12 +4,15 @@
 
 #include <memory>
 #include <string>
+
+#include "SceneView.h"
+#include "Scene.h"
+#include "EditorPanel.h"
+
+// ImGui includes
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include <GLFW/glfw3.h>
-
-#include "EditorPanel.h"
 
 namespace ui 
 {
@@ -19,11 +22,6 @@ namespace ui
 		scene = std::make_unique<Scene>();
 		sceneView = std::make_unique<SceneView>();
         editorPanel = std::make_unique<EditorPanel>();
-    }
-
-    UIContext::~UIContext() 
-    {
-        destroy();
     }
 
     bool UIContext::init(window::RenderWindow& window) 
@@ -36,9 +34,10 @@ namespace ui
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     
+        ImGui::StyleColorsDark();
         ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.1f, 0.1f, 1.0f };
         ImGui::GetStyle().WindowRounding = 0.0f;
-        
+
         if (!ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(window.getNativeWindow()), true)) 
         {
             std::cerr << "Failed to initialize ImGui \n";
@@ -54,7 +53,7 @@ namespace ui
         scene->init();
 
 		// setup callbacks for scene view and editor panel
-        editorPanel->setMeshLoadCallback([&](const std::string& filepath) { scene->loadModel(filepath); });
+        editorPanel->setMeshLoadCallback([&](const std::string& filepath) { scene->loadMesh(filepath); });
         
         return true;
     }

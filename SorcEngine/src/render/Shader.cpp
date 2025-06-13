@@ -30,9 +30,11 @@ int checkCompileErrors(unsigned int shader, std::string type)
 
 bool Shader::load(std::string vertexPath, std::string fragmentPath)
 {
+    std::cout << "Loading Shader: " << vertexPath << ", " << fragmentPath << std::endl;
+    
     // Read shader source files
-    std::string vertexSource = Util::ReadTextFromFile("res/shaders/" + vertexPath);
-    std::string fragmentSource = Util::ReadTextFromFile("res/shaders/" + fragmentPath);
+    std::string vertexSource = fileUtil::ReadTextFromFile("res/shaders/" + vertexPath);
+    std::string fragmentSource = fileUtil::ReadTextFromFile("res/shaders/" + fragmentPath);
 
     // Check if files were read successfully
     if (vertexSource.empty()) {
@@ -53,7 +55,8 @@ bool Shader::load(std::string vertexPath, std::string fragmentPath)
     glShaderSource(vertex, 1, &vShaderCode, NULL);
     glCompileShader(vertex);
 
-    if (!checkCompileErrors(vertex, "VERTEX")) {
+    if (!checkCompileErrors(vertex, "VERTEX")) 
+    {
         glDeleteShader(vertex);
         return false;
     }
@@ -96,11 +99,10 @@ bool Shader::load(std::string vertexPath, std::string fragmentPath)
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
-    std::cout << "Shader loaded successfully: " << vertexPath << ", " << fragmentPath << std::endl;
     return true;
 }
 
-void Shader::use()
+void Shader::use() const
 {
     glUseProgram(_ID);
 }
@@ -120,12 +122,12 @@ void Shader::setFloat(const std::string& name, float value) const
     glUniform1f(glGetUniformLocation(_ID, name.c_str()), value);
 }
 
-void Shader::setMat4(const std::string& name, glm::mat4 value)
+void Shader::setMat4(const std::string& name, glm::mat4 value) const
 {
     glUniformMatrix4fv(glGetUniformLocation(_ID, name.c_str()), 1, GL_FALSE, &value[0][0]);
 }
 
-void Shader::setVec3(const std::string& name, const glm::vec3& value)
+void Shader::setVec3(const std::string& name, const glm::vec3& value) const
 {
     glUniform3fv(glGetUniformLocation(_ID, name.c_str()), 1, &value[0]);
 }

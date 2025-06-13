@@ -1,3 +1,4 @@
+#pragma once
 
 #include "Engine.h"
 
@@ -9,6 +10,11 @@ namespace app
 {
     Engine::Engine() {}
 
+    Engine::~Engine()
+    {
+        shutDown();
+    }
+
     bool Engine::init(int width, int height, const std::string& title)
     {
         showToastMessage();
@@ -17,34 +23,28 @@ namespace app
         if (!renderer.init(window)) return false;
         if (!uiContext.init(window)) return false;
 
+		Camera* camera = uiContext.getScene()->getCamera();
+
         // bind callbacks
         window.setResizeCallback([&](int w, int h) { uiContext.getSceneView()->resize(w, h); });
-
-        // TODO Abstract this
-        inputManager.bindAction("moveCameraForward", [&](float dt) { uiContext.getScene()->getCamera()->moveForward(dt); });
-        inputManager.bindAction("moveCameraBackward", [&](float dt) { uiContext.getScene()->getCamera()->moveBackward(dt); });
-        inputManager.bindAction("moveCameraRight", [&](float dt) { uiContext.getScene()->getCamera()->moveRight(dt); });
-        inputManager.bindAction("moveCameraLeft", [&](float dt) { uiContext.getScene()->getCamera()->moveLeft(dt); });
-        inputManager.bindAction("moveCameraUp", [&](float dt) { uiContext.getScene()->getCamera()->moveUp(dt); });
-        inputManager.bindAction("moveCameraDown", [&](float dt) { uiContext.getScene()->getCamera()->moveDown(dt); });
-        //inputManager.bindCameraMoveAction("moveCamera", [&](float dt, int dir) { sceneCamera->moveCamera(dt, dir); });
-        inputManager.bindAction("toggleCursor", [&](float) { window.toggleCursor(); });
+        inputManager.initInputMap(camera, window);
 
         return true;
     }
 
-    void Engine::run() 
+    int Engine::run() 
     {
 
-        if (!init(1280, 720, "Sorc Engine - Main Window")) 
+        if (!init(SORC_WINDOW_WIDTH, SORC_WINDOW_HEIGHT, "Sorc Engine - Main Window")) 
         {
-            return;
+            return -1;
         }
 
         while (window.getIsRunning()) 
         {
             float deltaTime = uiContext.getSceneView()->getDeltaTime();
             
+            // update inputManager
             inputManager.setDeltaTime(deltaTime);
             inputManager.processInput(window);
 
@@ -62,6 +62,15 @@ namespace app
             window.swapBuffers();
             window.processEvents();
         }
+
+        return 0;
+    }
+
+    void Engine::shutDown()
+    {
+        uiContext.destroy();
+        renderer.destroy();
+        window.cleanup();
     }
 
     void Engine::showToastMessage()
@@ -71,13 +80,6 @@ namespace app
         std::cout << "Failure is an illusion.                           \n";
         std::cout << "You are your own worst enemy.		                \n";
         std::cout << "-----------------------------------------         \n";
-    }
-
-    Engine::~Engine()
-    {
-        uiContext.destroy();
-        renderer.destroy();
-        window.cleanup();
     }
 
 }

@@ -11,6 +11,9 @@ namespace render
     
     public:
 
+		Renderer() = default;
+		~Renderer() override = default;
+
         bool init(window::RenderWindow& windowHandle) override;
         void preRender() override;
         void postRender() override;

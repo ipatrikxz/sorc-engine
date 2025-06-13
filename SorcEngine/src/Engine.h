@@ -6,8 +6,6 @@
 #include "input/InputManager.h"
 #include "render/Renderer.h"
 #include "ui/UIContext.h"
-#include "ui/Scene.h"
-
 
 namespace app 
 {
@@ -19,7 +17,9 @@ namespace app
         Engine();
         ~Engine();
         
-        void run();
+        int run();
+		void shutDown();
+
         void showToastMessage();
 
     private:
