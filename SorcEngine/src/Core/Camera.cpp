@@ -48,7 +48,17 @@ void Camera::lookCamera(const double& offsetX, const double& offsetY)
 
 void Camera::moveCamera(const float& dt, const glm::vec3 direction)
 {
-	location += direction * speed * dt;
+	// convert input directions to world space using camera's orientation
+	glm::vec3 worldDirection =
+		front	* direction.z +     // forward/backward
+		right	* direction.x +     // left/right  
+		up		* direction.y;      // up/down
+	
+	// normalize the input direction just in case
+	worldDirection = glm::normalize(worldDirection);
+
+	// finally, move the camera in the world space direction
+	location += worldDirection * speed * dt;
 }
 
 void Camera::setAspectRatio(float aspect)

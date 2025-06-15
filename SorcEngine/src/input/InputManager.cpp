@@ -2,36 +2,30 @@
 
 #include "InputManager.h"
 
-#include <functional>
-#include <unordered_map>
-#include <string>
-
-#include "ui/UIContext.h"
+#include <GLFW/glfw3.h>
 #include "window/Window.h"
-#include "Core/Camera.h"
 
 namespace input 
 {
+
     void InputManager::processInput(window::RenderWindow& window)
     {
         GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(window.getNativeWindow());
 
-		// reset movement vector each frame
-        movementVector = glm::vec3(0.0f);
+        glm::vec3 inputVector(0.0f);
 
-		// accumulate movement vector based on pressed keys
-        for (const auto& [action, mapping] : inputMap) 
-        {
-            if (glfwGetKey(glfwWindow, mapping.key) == GLFW_PRESS) 
-            {
-                movementVector += mapping.inputVector;
-            }
-        }
+        // Accumulate input directions (not world directions)
+        if (glfwGetKey(glfwWindow, GLFW_KEY_W) == GLFW_PRESS) inputVector.z += 1.0f;  // forward
+        if (glfwGetKey(glfwWindow, GLFW_KEY_S) == GLFW_PRESS) inputVector.z -= 1.0f;  // backward
+        if (glfwGetKey(glfwWindow, GLFW_KEY_D) == GLFW_PRESS) inputVector.x += 1.0f;  // right
+        if (glfwGetKey(glfwWindow, GLFW_KEY_A) == GLFW_PRESS) inputVector.x -= 1.0f;  // left
+        if (glfwGetKey(glfwWindow, GLFW_KEY_E) == GLFW_PRESS) inputVector.y += 1.0f;  // up
+        if (glfwGetKey(glfwWindow, GLFW_KEY_Q) == GLFW_PRESS) inputVector.y -= 1.0f;  // down
 
-		// if we have a valid movement vector, call the action callback
-        if (glm::length(movementVector) > 0.0f && actionCallbacks.count("moveCamera")) 
+        // Pass raw input vector to camera - camera handles the rest
+        if (glm::length(inputVector) > 0.0f)
         {
-            actionCallbacks["moveCamera"](deltaTime);
+            movementDelegate(deltaTime, inputVector);
         }
 
 		// close window on ESC key press
@@ -40,7 +34,7 @@ namespace input
             window.setShouldClose();
         }
 
-		// mouse input handling                
+		// on right mouse press, capture mouse position            
         if (glfwGetMouseButton(glfwWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         {
 			// Capture mouse position
@@ -50,6 +44,7 @@ namespace input
 			handleMouseMovement(mouseX, mouseY);
         }
         
+		// on mouse release, reset cursor
         if (glfwGetMouseButton(glfwWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE) {
             glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             lastMouseX = 0;
@@ -73,62 +68,16 @@ namespace input
         lastMouseX = xpos;
         lastMouseY = ypos;
         
-        camera->lookCamera(offsetX, offsetY);
-    }
-
-    void InputManager::initInputMap(ui::UIContext& context)
-    {
-
-        // cache the camera
-		camera = context.getScene()->getCamera();
-       
-        if (!camera)
-        {
-            std::cerr << "Error: Camera was null during input initInputMap() \n";
-            return;
+        if (mouseLookDelegate) {
+            mouseLookDelegate(offsetX, offsetY);
         }
-
-		// movement directions - TODO : hide this further
-        inputMap["forward"]         = { GLFW_KEY_W, glm::vec3(0.0f, 0.0f, 1.0f)};
-        inputMap["backward"]        = { GLFW_KEY_S, glm::vec3(0.0f, 0.0f, -1.0f)};
-        inputMap["right"]           = { GLFW_KEY_D, glm::vec3(1.0f, 0.0f, 0.0f)};
-        inputMap["left"]            = { GLFW_KEY_A, glm::vec3(-1.0f, 0.0f, 0.0f)};
-        inputMap["up"]              = { GLFW_KEY_E, glm::vec3(0.0f, 1.0f, 0.0f)};
-        inputMap["down"]            = { GLFW_KEY_Q, glm::vec3(0.0f, -1.0f, 0.0f)};
-
-        // bind moveCamera action
-        if (!actionCallbacks.count("moveCamera")) 
-        {
-            actionCallbacks["moveCamera"] = [this](float dt) 
-            {
-                glm::vec3 worldDir = (
-                    this->camera->getFront() * movementVector.z +
-                    this->camera->getRight() * movementVector.x +
-                    this->camera->getUp() * movementVector.y
-                );
-                
-				// If the length of the direction is greater than zero, we can move
-                if (glm::length(worldDir) > 0.0f)
-                {
-                    worldDir = glm::normalize(worldDir);
-                    // finally move the camera
-                    camera->moveCamera(dt, worldDir);
-                }
-            };
-        }
-
     }
 
-    void InputManager::bindAction(const std::string& action, std::function<void(float)> callback) 
+    void InputManager::clearDelegates()
     {
-        actionCallbacks[action] = callback;
+        movementDelegate = nullptr;
+        mouseLookDelegate = nullptr;
+        actionDelegates.clear();
     }
-
-    void InputManager::unbindAndClearInput()
-    {
-		actionCallbacks.clear();
-        inputMap.clear();
-    }
-
 
 }

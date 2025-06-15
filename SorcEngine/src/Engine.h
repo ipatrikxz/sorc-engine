@@ -24,12 +24,12 @@ namespace app
 
     private:
 
-        window::RenderWindow window;
-        render::Renderer renderer;
+        std::unique_ptr<window::RenderWindow> window;
+        std::unique_ptr<render::Renderer> renderer;
 
         // components
-        ui::UIContext uiContext;
-        input::InputManager inputManager;
+        std::unique_ptr<ui::UIContext> uiContext;
+        std::unique_ptr<input::InputManager> inputManager;
 
         bool init(int width, int height, const std::string& title);
     };

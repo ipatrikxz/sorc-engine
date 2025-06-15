@@ -29,6 +29,49 @@ Mesh::~Mesh()
     glDeleteVertexArrays(1, &vao);
 }
 
+
+void Mesh::draw(Shader& shader)
+{
+    //shader.use();
+    shader.setMat4("model", transform.to_mat4());
+
+    // Set PBR material parameters
+    shader.setVec3("albedo_color", material.color);
+    shader.setFloat("metallic", material.metallic);
+    shader.setFloat("roughness", material.roughness);
+    shader.setFloat("ao", material.ao);
+
+    if (!textures.empty()) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textures[0]->GetID());
+        shader.setInt("albedo_color_texture", 0);
+    }
+
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
+void Mesh::setupMesh()
+{
+    unsigned int VBO, EBO;
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(sVertex), vertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, position));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, normal));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, uv));
+    glBindVertexArray(0);
+}
+
 bool Mesh::load(const std::string& path)
 {
     Assimp::Importer importer;
@@ -47,7 +90,7 @@ bool Mesh::load(const std::string& path)
     }
 
     // Process first mesh (simplified for now; extend for multiple meshes if needed)
-    if (scene->mNumMeshes > 0) 
+    if (scene->mNumMeshes > 0)
     {
         aiMesh* mesh = scene->mMeshes[0];
 
@@ -102,7 +145,7 @@ bool Mesh::load(const std::string& path)
 
             // Load texture
             aiString texPath;
-            if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS) 
+            if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
             {
                 std::string texturePath = directory + "/" + texPath.C_Str();
                 std::cout << "Loading texture: " << texturePath << std::endl;
@@ -110,59 +153,13 @@ bool Mesh::load(const std::string& path)
                 textures.push_back(texture);
             }
             else {
-				textures.clear(); // Clear textures if no diffuse texture is found
                 std::cout << "No diffuse texture found for mesh: " << name << std::endl;
-			}
+                textures.clear(); // Clear textures if no diffuse texture is found
+            }
         }
 
         setupMesh();
     }
 
     return true;
-}
-
-void Mesh::draw(Shader& shader)
-{
-    //shader.use();
-    shader.setMat4("model", transform.to_mat4());
-
-    // Set PBR material parameters
-    shader.setVec3("albedo_color", material.color);
-    shader.setFloat("metallic", material.metallic);
-    shader.setFloat("roughness", material.roughness);
-    shader.setFloat("ao", material.ao);
-
-    if (!textures.empty()) {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textures[0]->GetID());
-        shader.setInt("albedo_color_texture", 0);
-    }
-
-    glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
-    GLenum err = glGetError();
-    if (err != GL_NO_ERROR) {
-        std::cerr << "OpenGL error in Mesh::draw: " << err << std::endl;
-    }
-    glBindVertexArray(0);
-}
-
-void Mesh::setupMesh()
-{
-    unsigned int VBO, EBO;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(sVertex), vertices.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, position));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, normal));
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, uv));
-    glBindVertexArray(0);
 }

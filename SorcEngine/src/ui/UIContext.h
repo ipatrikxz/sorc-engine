@@ -1,10 +1,13 @@
 #pragma once
 
-#include <glm/gtc/type_ptr.hpp>
 #include "window/Window.h"
 #include "SceneView.h"
 #include "Scene.h"
 #include "EditorPanel.h"
+
+namespace input {
+	class InputManager;
+}
 
 namespace ui 
 {
@@ -18,6 +21,7 @@ namespace ui
         ~UIContext() = default;
 
         bool init(window::RenderWindow& window);
+        bool initInput(input::InputManager& inputManager);
         void preRender();
         void render();
         void postRender();

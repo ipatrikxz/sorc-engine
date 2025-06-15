@@ -21,6 +21,8 @@ namespace ui
 
         lightPosition = glm::vec3(2.0f, 2.0f, -2.0f);
         lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        init();
     }
 
     void Scene::init()
@@ -29,7 +31,6 @@ namespace ui
         activeShader->load("pbr.vert", "pbr.frag");
 
         loadMesh("res/models/Cube.obj");
-        
         setupFloor();
     }
 
@@ -75,27 +76,28 @@ namespace ui
         glm::vec3 viewPos = camera->getLocation();
 
         sMaterial material = {
-            glm::vec3(0.7f, 0.7f, 0.7f),    // color
-            0.0f,                           // metallic
+            glm::vec3(0.2f, 0.2f, 0.2f),    // color
+            0.2f,                           // metallic
             0.5f,                           // roughness
-            0.2f                            // ao 
+            0.5f                            // ao 
         };
 
         floorShader->use();
-        floorShader->setMat4("model", floorTransform.to_mat4());
-        floorShader->setMat4("projection", projection);
-        floorShader->setMat4("view", view);
-        floorShader->setVec3("camPos", viewPos);
+        floorShader->setMat4("model",           floorTransform.to_mat4());
+        floorShader->setMat4("projection",      projection);
+        floorShader->setMat4("view",            view);
+        floorShader->setVec3("camPos",          viewPos);
 
-        // Set PBR material parameters (no texture for floor)
-        floorShader->setVec3("albedo_color", material.color);
-        floorShader->setFloat("metallic", material.metallic);
-        floorShader->setFloat("roughness", material.roughness);
-        floorShader->setFloat("ao", material.ao);
+        // Set material parameters
+        floorShader->setVec3("albedo_color",    material.color);
+        floorShader->setFloat("metallic",       material.metallic);
+        floorShader->setFloat("roughness",      material.roughness);
+        floorShader->setFloat("ao",             material.ao);
+		floorShader->setInt("albedo_texture",   0);
 
         // Set light properties
-        floorShader->setVec3("light_position", lightPosition);
-        floorShader->setVec3("light_color", lightColor);
+        floorShader->setVec3("light_position",  lightPosition);
+        floorShader->setVec3("light_color",     lightColor);
 
         glBindVertexArray(floorVAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -127,7 +129,7 @@ namespace ui
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*) 0);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, normal));
         glEnableVertexAttribArray(2);

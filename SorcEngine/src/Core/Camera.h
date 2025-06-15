@@ -15,8 +15,6 @@ public:
 	void lookCamera(const double& offsetX, const double& offsetY);
 	void moveCamera(const float& delta, const glm::vec3 direction);
 
-	void setAspectRatio(float aspect);
-
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix() const { return projection; }
 	
@@ -25,6 +23,8 @@ public:
 	glm::vec3 getUp() const			{ return up; }
 	glm::vec3 getLocation() const	{ return location; }
 	glm::vec3 getRotation() const	{ return glm::vec3(pitch, yaw, roll); }
+
+	void setAspectRatio(float aspect);
 
 private:
 

@@ -8,6 +8,7 @@
 #include "SceneView.h"
 #include "Scene.h"
 #include "EditorPanel.h"
+#include "input/InputManager.h"
 
 // ImGui includes
 #include <imgui.h>
@@ -50,11 +51,32 @@ namespace ui
             return false;
         }
 
-        scene->init();
-
 		// setup callbacks for scene view and editor panel
+        window.setResizeCallback([&](int w, int h) { getSceneView()->resize(w, h); });
         editorPanel->setMeshLoadCallback([&](const std::string& filepath) { scene->loadMesh(filepath); });
         
+        return true;
+    }
+
+    bool UIContext::initInput(input::InputManager& inputManager)
+    {
+        Camera* camera = getScene()->getCamera();
+
+        if (!camera) {
+            std::cerr << "Error: Camera was null during input initialization\n";
+            return false;
+        }
+
+        // Bind camera movement
+        inputManager.setMovementDelegate([camera](float deltaTime, const glm::vec3& inputVector) {
+            camera->moveCamera(deltaTime, inputVector);
+        });
+
+        // Bind camera look
+        inputManager.setMouseLookDelegate([camera](double offsetX, double offsetY) {
+            camera->lookCamera(offsetX, offsetY);
+        });
+
         return true;
     }
 

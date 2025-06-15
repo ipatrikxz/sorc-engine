@@ -1,7 +1,6 @@
 
 #include "SceneView.h"
 #include "Scene.h"
-#include "core/Camera.h"
 #include <imgui.h>
 
 namespace ui 
@@ -10,7 +9,6 @@ namespace ui
         : sizeX(0), sizeY(0), deltaTime(0) 
     {
         frameBuffer = std::make_unique<render::FrameBuffer>();
-
     }
 
     void SceneView::render(Scene& scene) 

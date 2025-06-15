@@ -1,11 +1,9 @@
 #pragma once
 
 #include <iostream>	
-#include <functional>
 #include <unordered_map>
-#include <string>
+#include <functional>
 #include <glm/glm.hpp>
-#include "ui/UIContext.h"
 
 namespace window {
     class RenderWindow;
@@ -16,15 +14,13 @@ class Camera;
 namespace input 
 {
 
-    struct sInputAction 
-    {
-        int key;
-        glm::vec3 inputVector;
-    };
+    // Type aliases for delegates
+    using MovementDelegate = std::function<void(float deltaTime, const glm::vec3& inputVector)>;
+    using MouseLookDelegate = std::function<void(double offsetX, double offsetY)>;
+    using ActionDelegate = std::function<void()>;
 
 	/* 
-    * InputManager class 
-    * handles input bindings, actions and callbacks
+    * InputManager 
     * 
     */
     class InputManager 
@@ -32,31 +28,34 @@ namespace input
 
     public:
 
-        InputManager() : deltaTime(0.0f), lastMouseX(0), lastMouseY(0), camera(nullptr) {}
-        ~InputManager() { unbindAndClearInput(); }
+        InputManager() : deltaTime(0.0f), lastMouseX(0), lastMouseY(0) {}
 
-        void initInputMap(ui::UIContext& context);
+		~InputManager() = default;
+
         void processInput(window::RenderWindow& window);
-        void bindAction(const std::string& action, std::function<void(float)> callback);
         void handleMouseMovement(double xpos, double ypos);
+
         void setDeltaTime(float dt) { deltaTime = dt; }
-        void unbindAndClearInput();
+
+        // Clear all delegates
+        void clearDelegates();
+
+        // Delegate registration methods
+        void setMovementDelegate(MovementDelegate delegate) { movementDelegate = delegate; }
+        void setMouseLookDelegate(MouseLookDelegate delegate) { mouseLookDelegate = delegate; }
+        void setActionDelegate(const std::string& action, ActionDelegate delegate) { actionDelegates[action] = delegate; }
 
     private:
-
-        Camera* camera;
 
         float deltaTime;
         
 		// mouse tracking
         double lastMouseY;
         double lastMouseX;
-        
-        std::unordered_map<std::string, std::function<void(float)>> actionCallbacks;
-        
-        std::unordered_map<std::string, sInputAction> inputMap;
 
-        glm::vec3 movementVector = glm::vec3(0.0f);
-
+        // Delegates
+        MovementDelegate movementDelegate;
+        MouseLookDelegate mouseLookDelegate;
+        std::unordered_map<std::string, ActionDelegate> actionDelegates;
     };
 }

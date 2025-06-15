@@ -5,7 +5,8 @@
 
 int main() 
 {
-	app::Engine engine;
-	engine.run();
+	std::unique_ptr<app::Engine> engine;
+	engine = std::make_unique<app::Engine>();
+	engine->run();
 	return 0;
 }
