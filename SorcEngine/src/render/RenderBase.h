@@ -3,8 +3,6 @@
 #include "util.hpp"
 #include "window/Window.h"
 
-// TODO - Comment more
-
 class RenderWindow;
 
 namespace render 

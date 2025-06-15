@@ -22,7 +22,7 @@ namespace window
         void toggleCursor();
         void processEvents();
         bool getIsRunning() const { return isRunning; }
-        void* getNativeWindow() const { return windowHandle; }
+        GLFWwindow* getNativeWindow() const { return windowHandle; }
         void getFramebufferSize(int& width, int& height) const;
         void setShouldClose();
 

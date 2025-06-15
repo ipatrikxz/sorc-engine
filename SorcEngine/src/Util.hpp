@@ -31,10 +31,9 @@ namespace fileUtil {
 
 /*
 * sVertex is a structure that represents a vertex in 3D space.
-* It contains position, normal, and UV coordinates.
-* The position is a 3D vector representing the vertex's location in space,
-* the normal is a 3D vector representing the vertex's normal direction, and
-* the UV is a 2D vector representing the texture coordinates of the vertex.
+* vec3 position - the position of the vertex in 3D space
+* vec3 normal - for lighting calculations
+* vec2 uv - texture coordinates
 */
 struct sVertex {
 	glm::vec3 position = glm::vec3(0);
@@ -45,8 +44,10 @@ struct sVertex {
 
 /*
 * sTransform is a structure that holds transformation data for an object in 3D space.
-* It includes location, rotation, and scale properties, and provides a method to convert these properties into a 4x4 transformation matrix.
-* The transformation matrix is constructed by first translating the object to its location, then applying rotation using a quaternion derived from the rotation vector, and finally scaling the object.
+* vec3 location - the position of the object in 3D space
+* vec3 rotation - the rotation of the object in 3D space (in radians)
+* vec3 scale - the scale of the object in 3D space
+* to_mat4() function converts the transformation data into a 4x4 matrix.
 */
 struct sTransform {
 	glm::vec3 location = glm::vec3(0);
@@ -64,7 +65,10 @@ struct sTransform {
 
 /*
 * sMaterial is a simple structure to hold material properties.
-* It contains color, roughness, metallic, and ambient occlusion properties.
+* vec3 color, 
+* float roughness,
+* float metallic, 
+* float ambient occlusion
 */
 struct sMaterial {
 	glm::vec3 color = { 1.0f, 0.0f, 0.0f };

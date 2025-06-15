@@ -39,9 +39,7 @@ bool Mesh::load(const std::string& path)
 
     directory = std::filesystem::path(path).parent_path().string();
     name = std::filesystem::path(path).filename().string();
-
     std::cout << "Loading Mesh: " << name << std::endl;
-	std::cout << "Directory: " << directory << std::endl;
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::cout << "Failed to load model: " << importer.GetErrorString() << std::endl;
@@ -111,6 +109,10 @@ bool Mesh::load(const std::string& path)
                 Texture* texture = new Texture(texturePath);
                 textures.push_back(texture);
             }
+            else {
+				textures.clear(); // Clear textures if no diffuse texture is found
+                std::cout << "No diffuse texture found for mesh: " << name << std::endl;
+			}
         }
 
         setupMesh();
@@ -151,14 +153,11 @@ void Mesh::setupMesh()
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
-
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(sVertex), vertices.data(), GL_STATIC_DRAW);
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, position));
     glEnableVertexAttribArray(1);

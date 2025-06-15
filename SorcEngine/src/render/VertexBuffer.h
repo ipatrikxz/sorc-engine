@@ -4,7 +4,7 @@
 
 namespace render 
 {
-    class VertexBuffer : public render::IVertexBuffer 
+    class VertexBuffer : public IVertexBuffer 
     {
 
     public:

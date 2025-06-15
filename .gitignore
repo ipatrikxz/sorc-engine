@@ -16,7 +16,6 @@ Release/
 bin/
 build/
 x64/
-x64/Debug/
 
 # Dependencies
 external/

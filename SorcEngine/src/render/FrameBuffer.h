@@ -4,7 +4,7 @@
 
 namespace render 
 {
-    class FrameBuffer : public render::IFrameBuffer 
+    class FrameBuffer : public IFrameBuffer 
     {
 
     public:

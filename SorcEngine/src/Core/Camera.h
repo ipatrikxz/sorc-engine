@@ -26,12 +26,6 @@ public:
 	glm::vec3 getLocation() const	{ return location; }
 	glm::vec3 getRotation() const	{ return glm::vec3(pitch, yaw, roll); }
 
-	// why the fuck i didnt used this earlier?
-	static Camera* getInstance() {
-		static Camera instance;
-		return &instance;
-	}
-
 private:
 
 	glm::vec3 location;

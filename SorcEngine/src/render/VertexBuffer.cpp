@@ -20,6 +20,7 @@ namespace render
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, normal));
         glBindVertexArray(0);
+
         if (glGetError() != GL_NO_ERROR) {
             throw std::runtime_error("Failed to create vertex buffer");
         }

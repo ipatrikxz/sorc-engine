@@ -27,8 +27,13 @@ namespace ui
             scene.getCamera()->setAspectRatio(sizeX / sizeY);
         }
 
+		// Bind the framebuffer
         frameBuffer->bind();
+
+		// render the scene
         scene.render();
+        
+		// Unbind the framebuffer
         frameBuffer->unbind();
 
         ImGui::Image(frameBuffer->getTexture(), ImVec2(sizeX, sizeY), ImVec2(0, 1), ImVec2(1, 0));

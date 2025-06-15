@@ -23,11 +23,9 @@ namespace app
         if (!renderer.init(window)) return false;
         if (!uiContext.init(window)) return false;
 
-		Camera* camera = uiContext.getScene()->getCamera();
-
         // bind callbacks
         window.setResizeCallback([&](int w, int h) { uiContext.getSceneView()->resize(w, h); });
-        inputManager.initInputMap(camera, window);
+        inputManager.initInputMap(uiContext);
 
         return true;
     }
@@ -35,6 +33,7 @@ namespace app
     int Engine::run() 
     {
 
+		// initialize the engine
         if (!init(SORC_WINDOW_WIDTH, SORC_WINDOW_HEIGHT, "Sorc Engine - Main Window")) 
         {
             return -1;
@@ -77,6 +76,7 @@ namespace app
     {
         std::cout << "Welcome to Sorc Engine!\n Version: 1.0.0          \n";
         std::cout << "-----------------------------------------         \n";
+		std::cout << "Don't you dare go hollow.                         \n";
         std::cout << "Failure is an illusion.                           \n";
         std::cout << "You are your own worst enemy.		                \n";
         std::cout << "-----------------------------------------         \n";

@@ -5,10 +5,12 @@
 #include <unordered_map>
 #include <string>
 #include <glm/glm.hpp>
+#include "ui/UIContext.h"
 
 namespace window {
     class RenderWindow;
 }
+
 class Camera;
 
 namespace input 
@@ -18,7 +20,6 @@ namespace input
     {
         int key;
         glm::vec3 inputVector;
-        std::function<void(float)> callback;
     };
 
 	/* 
@@ -34,16 +35,11 @@ namespace input
         InputManager() : deltaTime(0.0f), lastMouseX(0), lastMouseY(0), camera(nullptr) {}
         ~InputManager() { unbindAndClearInput(); }
 
-        void initInputMap(Camera* camera, const window::RenderWindow& window);
-        
+        void initInputMap(ui::UIContext& context);
         void processInput(window::RenderWindow& window);
-
         void bindAction(const std::string& action, std::function<void(float)> callback);
-        
         void handleMouseMovement(double xpos, double ypos);
-
         void setDeltaTime(float dt) { deltaTime = dt; }
-
         void unbindAndClearInput();
 
     private:

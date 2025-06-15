@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <string>
 
+#include "ui/UIContext.h"
 #include "window/Window.h"
 #include "Core/Camera.h"
 
@@ -43,69 +44,67 @@ namespace input
         if (glfwGetMouseButton(glfwWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         {
 			// Capture mouse position
-            glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CENTER_CURSOR);
+            glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             double mouseX, mouseY;
             glfwGetCursorPos(glfwWindow, &mouseX, &mouseY);
 			handleMouseMovement(mouseX, mouseY);
         }
         
-        if (glfwGetMouseButton(glfwWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE)
-        {
+        if (glfwGetMouseButton(glfwWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE) {
             glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            lastMouseX = 0;
+            lastMouseY = 0;
         }
     }
 
     void InputManager::handleMouseMovement(double xpos, double ypos)
     {
-        if (lastMouseX != 0 || lastMouseY != 0)
-        {
-            double offsetX = xpos - lastMouseX;
-            double offsetY = lastMouseY - ypos;
-
+        // First movement
+        if (lastMouseX == 0 && lastMouseY == 0) 
+        { 
             lastMouseX = xpos;
             lastMouseY = ypos;
-
-            // Apply rotation to camera
-            camera->lookCamera(offsetX, offsetY);
-        }
-        else
-        {
-			lastMouseX = 0;
-			lastMouseY = 0;
+            return;
         }
 
+        double offsetX = xpos - lastMouseX;
+        double offsetY = lastMouseY - ypos;
+        
         lastMouseX = xpos;
         lastMouseY = ypos;
+        
+        camera->lookCamera(offsetX, offsetY);
     }
 
-    void InputManager::initInputMap(Camera* camera, const window::RenderWindow& window)
+    void InputManager::initInputMap(ui::UIContext& context)
     {
+
+        // cache the camera
+		camera = context.getScene()->getCamera();
+       
         if (!camera)
         {
             std::cerr << "Error: Camera was null during input initInputMap() \n";
             return;
         }
 
-        // cache the camera
-		this->camera = camera;
-
 		// movement directions - TODO : hide this further
-        inputMap["forward"]         = { GLFW_KEY_W, glm::vec3(0.0f, 0.0f, 1.0f),    nullptr };
-        inputMap["backward"]        = { GLFW_KEY_S, glm::vec3(0.0f, 0.0f, -1.0f),   nullptr };
-        inputMap["right"]           = { GLFW_KEY_D, glm::vec3(1.0f, 0.0f, 0.0f),    nullptr };
-        inputMap["left"]            = { GLFW_KEY_A, glm::vec3(-1.0f, 0.0f, 0.0f),   nullptr };
-        inputMap["up"]              = { GLFW_KEY_E, glm::vec3(0.0f, 1.0f, 0.0f),    nullptr };
-        inputMap["down"]            = { GLFW_KEY_Q, glm::vec3(0.0f, -1.0f, 0.0f),   nullptr };
+        inputMap["forward"]         = { GLFW_KEY_W, glm::vec3(0.0f, 0.0f, 1.0f)};
+        inputMap["backward"]        = { GLFW_KEY_S, glm::vec3(0.0f, 0.0f, -1.0f)};
+        inputMap["right"]           = { GLFW_KEY_D, glm::vec3(1.0f, 0.0f, 0.0f)};
+        inputMap["left"]            = { GLFW_KEY_A, glm::vec3(-1.0f, 0.0f, 0.0f)};
+        inputMap["up"]              = { GLFW_KEY_E, glm::vec3(0.0f, 1.0f, 0.0f)};
+        inputMap["down"]            = { GLFW_KEY_Q, glm::vec3(0.0f, -1.0f, 0.0f)};
 
         // bind moveCamera action
         if (!actionCallbacks.count("moveCamera")) 
         {
-            actionCallbacks["moveCamera"] = [camera, this](float dt) 
+            actionCallbacks["moveCamera"] = [this](float dt) 
             {
                 glm::vec3 worldDir = (
-                    camera->getFront() * movementVector.z +
-                    camera->getRight() * movementVector.x +
-                    camera->getUp() * movementVector.y
+                    this->camera->getFront() * movementVector.z +
+                    this->camera->getRight() * movementVector.x +
+                    this->camera->getUp() * movementVector.y
                 );
                 
 				// If the length of the direction is greater than zero, we can move
@@ -117,6 +116,7 @@ namespace input
                 }
             };
         }
+
     }
 
     void InputManager::bindAction(const std::string& action, std::function<void(float)> callback) 

@@ -59,7 +59,6 @@ void Camera::setAspectRatio(float aspect)
 
 glm::mat4 Camera::getViewMatrix()
 {
-	viewMatrix = glm::lookAt(location, location + front, up);
 	UpdateCameraVectors();
 	return viewMatrix;
 }

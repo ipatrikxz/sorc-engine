@@ -33,12 +33,11 @@ namespace ui
 
 		// camera
         std::shared_ptr<Camera> camera;
-        
-		sTransform meshTransform;
 
         // mesh
         std::shared_ptr<Mesh> activeMesh;
         std::shared_ptr<Shader> activeShader;
+		sTransform meshTransform;
 
         // floor
         GLuint floorVAO;
