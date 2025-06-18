@@ -5,60 +5,54 @@
 #include "Util.hpp"
 #include <functional>
 #include "Scene.h"
+#include "core/Camera.h"
 
 namespace ui 
 {
     void EditorPanel::render(Scene& scene)
     {
-        Shader* shader = scene.getActiveShader();
-        Mesh* mesh = scene.getActiveMesh();
-
-        if (!shader)
-        {
-            ImGui::Begin("Properties");
-            ImGui::Text("No active shader!");
-            ImGui::End();
-            return;
-        }
-
-		// Import Mesh dialog
         ImGui::Begin("Properties");
+
         if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
         {
-
-            if (ImGui::Button("Open..."))
+            // import Mesh dialog
+            if (ImGui::Button("Open Mesh..."))
             {
                 fileDialog.Open();
             }
+
             ImGui::SameLine(0, 5.0f);
             ImGui::Text(currentFile.c_str());
+        
+			// texture file dialog
+            if (ImGui::Button("Open Texture..."))
+            {
+                textureFileDialog.Open();
+            }
+
+            ImGui::SameLine(0, 5.0f);
+            ImGui::Text(currentTextureFile.c_str());
         }
 
-		// Display mesh properties if a mesh is selected
-        if (ImGui::CollapsingHeader("Material") && mesh && shader) 
+		// display mesh properties if a mesh is selected
+        if (ImGui::CollapsingHeader("Scene")) 
         {
-            sMaterial material = mesh->getMaterial();
+            
+            DirLight& dirLight = scene.getDirLight();
+            
+			// destruct direction vector
+            float dir[3] = { dirLight.direction.x, dirLight.direction.y, dirLight.direction.z };
 
-            if (ImGui::ColorPicker3("Color", (float*)&material.color, ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_DisplayRGB)) 
+            ImGui::Separator();
+            ImGui::Text("Directional Light");
+
+            if (ImGui::DragFloat3("direction", dir, 0.01f, -1.0f, 1.0f, "%.3f"))
             {
-                mesh->setMaterial(material);
+				dirLight.direction = glm::vec3(dir[0], dir[1], dir[2]);
+                scene.setDirLight(dirLight);
             }
-
-            if (ImGui::SliderFloat("Roughness", &material.roughness, 0.0f, 1.0f)) 
-            {
-                mesh->setMaterial(material);
-            }
-
-            if (ImGui::SliderFloat("Metallic", &material.metallic, 0.0f, 1.0f)) 
-            {
-                mesh->setMaterial(material);
-            }
-
-            if (ImGui::SliderFloat("Ambient Occlusion", &material.ao, 0.0f, 1.0f))
-            {
-                mesh->setMaterial(material);
-            }
-
+            ImGui::Separator();
+            
         }
 
         if (ImGui::CollapsingHeader("Camera"))
@@ -78,8 +72,18 @@ namespace ui
             ImGui::Text("Roll: %.2f", scene.getCamera()->getRotation().z);
         }
 
+        if (ImGui::CollapsingHeader("Performance"))
+        {
+            ImGuiIO io = ImGui::GetIO();
+			float fps = io.Framerate;
+
+            ImGui::Separator();
+            ImGui::Text("Framerate: %.2f", fps);
+        }
+
         ImGui::End();
 
+        // handle mesh file dialog
         fileDialog.Display();
         if (fileDialog.HasSelected())
         {
@@ -89,5 +93,14 @@ namespace ui
             fileDialog.ClearSelected();
         }
 
+        // handle texture file dialog
+        textureFileDialog.Display();
+        if (textureFileDialog.HasSelected())
+        {
+            auto texture_path = textureFileDialog.GetSelected().string();
+            currentTextureFile = texture_path.substr(texture_path.find_last_of("/\\") + 1);
+            textureLoadCallback(texture_path);
+            textureFileDialog.ClearSelected();
+        }
     }
 }

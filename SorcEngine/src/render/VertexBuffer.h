@@ -10,7 +10,7 @@ namespace render
     public:
 
         // IVertexBuffer interface
-        void create(const std::vector<sVertex>& vertices, const std::vector<unsigned int>& indices) override;
+        void create(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) override;
         void destroy() override;
         void bind() override;
         void unbind() override;

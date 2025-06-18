@@ -81,12 +81,17 @@ namespace app
 
     void Engine::showToastMessage()
     {
-        std::cout << "Welcome to Sorc Engine!\n Version: 1.0.0          \n";
-        std::cout << "-----------------------------------------         \n";
-		std::cout << "Don't you dare go hollow.                         \n";
-        std::cout << "Failure is an illusion.                           \n";
-        std::cout << "You are your own worst enemy.		                \n";
-        std::cout << "-----------------------------------------         \n";
+        std::cout << "Welcome to Sorc Engine!\n Version: 1.0.0 "    << std::endl;
+        std::cout << "-----------------------------------------"    << std::endl;
+		std::cout << "Don't you dare go hollow.                "    << std::endl;
+        std::cout << "Failure is an illusion.                  "    << std::endl;
+        std::cout << "You are your own worst enemy.		       "    << std::endl;
+        std::cout << "-----------------------------------------"    << std::endl;
+		std::cout << "Your mind is assaulted by reality        "    << std::endl;
+		std::cout << "yet it shields itself with hope          "    << std::endl;
+		std::cout << "a flimsy falsehood that holds the        "    << std::endl;
+		std::cout << "crashing truth of hopelessness all the same"  << std::endl;
+        std::cout << "-----------------------------------------"    << std::endl;
     }
 
 }

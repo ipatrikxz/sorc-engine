@@ -4,8 +4,11 @@
 
 #include <memory>
 #include "core/Camera.h"
-#include "render/Shader.h"
-#include "render/Mesh.h"
+#include "object/Shader.h"
+#include "object/Mesh.h"
+#include "object/Model.h"
+
+enum TextureType;
 
 namespace ui 
 {
@@ -13,92 +16,93 @@ namespace ui
     Scene::Scene() 
     {
         camera = std::make_shared<Camera>();
-        activeShader = std::make_shared<Shader>();
-        floorShader = std::make_shared<Shader>();
+        lightsShader = std::make_shared<Shader>();
 
-		meshTransform.location = glm::vec3(0.0f, 1.0f, 0.0f);
-		meshTransform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		modelTransform.location = glm::vec3(0.0f, 1.0f, 0.0f);
+		modelTransform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-        lightPosition = glm::vec3(2.0f, 2.0f, -2.0f);
-        lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+		dirLight.direction = glm::vec3(0.0f, -1.0f, 1.0f);
+		dirLight.ambient = glm::vec3(0.05f, 0.05f, 0.05f);
+		dirLight.diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
+		dirLight.specular = glm::vec3(0.5f, 0.5f, 0.5f);
 
-        init();
-    }
-
-    void Scene::init()
-    {
-        floorShader->load("pbr.vert", "pbr.frag");
-        activeShader->load("pbr.vert", "pbr.frag");
-
-        loadMesh("res/models/Cube.obj");
+        lightsShader->load("lights.vert", "lights.frag");
+        loadModel("res/models/Sphere.obj");
         setupFloor();
     }
 
     void Scene::render() 
     {	
-        drawFloor();
         drawMesh();
+        drawFloor();
     }
 
-    void Scene::loadMesh(const std::string& filepath) 
+    void Scene::loadModel(const std::string& filepath) 
     {
-        activeMesh = std::make_shared<Mesh>();
-        activeMesh->load(filepath);
+        activeModel = std::make_shared<Model>();
+        activeModel->load(filepath);
+    }
+
+    void Scene::loadTexture(const std::string& filepath)
+    {
+		Model* model = getActiveModel();
+        if (!model) return;
+
+		model->loadTexture(filepath);
     }
 
     void Scene::drawMesh()
     {
-		if (!activeMesh) return;
+		if (!activeModel) return;
+
+        auto& meshes = activeModel->getMeshes();
+        if (meshes.empty()) return;
         
-        activeMesh->setTransform(meshTransform);
-	
+        auto& mesh = meshes[0];
+        mesh->setTransform(modelTransform);
+		Material material = activeModel->getMeshes()[0]->getMaterial();
+
         glm::mat4 projection = camera->getProjectionMatrix();
         glm::mat4 view = camera->getViewMatrix();
         glm::vec3 viewPos = camera->getLocation();
-  
-		activeShader->use();
-		// set camera parameters
-        activeShader->setMat4("projection", projection);
-        activeShader->setMat4("view", view);
-        activeShader->setVec3("camPos", viewPos);
 
-        // set light parameters
-        activeShader->setVec3("light_position", lightPosition);
-        activeShader->setVec3("light_color", lightColor);
+        lightsShader->use();
+        // camera
+        lightsShader->setMat4("view", view);
+        lightsShader->setVec3("viewPos", viewPos);
+        lightsShader->setMat4("projection", projection);
+        // material
+        lightsShader->setFloat("material.shininess", 32.0f);
+		// directional light
+        lightsShader->setVec3("dirLight.direction", dirLight.direction);
+        lightsShader->setVec3("dirLight.ambient", dirLight.ambient);
+        lightsShader->setVec3("dirLight.diffuse", dirLight.diffuse);
+        lightsShader->setVec3("dirLight.specular", dirLight.specular);
+		// transforms
+        lightsShader->setMat4("model", modelTransform.to_mat4());
+        lightsShader->setInt("material.diffuse", 0);
+        lightsShader->setInt("material.specular", 1);
+        // Example point light
+        lightsShader->setVec3("pointLights[0].position",    glm::vec3(2.0f, 2.0f, -2.0f));
+        lightsShader->setVec3("pointLights[0].ambient",     glm::vec3(0.1f));
+        lightsShader->setVec3("pointLights[0].diffuse",     glm::vec3(0.5f));
+        lightsShader->setVec3("pointLights[0].specular",    glm::vec3(1.0f));
+        lightsShader->setFloat("pointLights[0].constant",   1.0f);
+        lightsShader->setFloat("pointLights[0].linear",     0.09f);
+        lightsShader->setFloat("pointLights[0].quadratic",  0.032f);
 
-        activeMesh->draw(*activeShader);
+        activeModel->draw(*lightsShader);
     }
 
     void Scene::drawFloor() 
     {
         glm::mat4 projection = camera->getProjectionMatrix();
         glm::mat4 view = camera->getViewMatrix();
-        glm::vec3 viewPos = camera->getLocation();
 
-        sMaterial material = {
-            glm::vec3(0.2f, 0.2f, 0.2f),    // color
-            0.2f,                           // metallic
-            0.5f,                           // roughness
-            0.5f                            // ao 
-        };
+        lightsShader->use();
+        lightsShader->setMat4("model", floorTransform.to_mat4());
 
-        floorShader->use();
-        floorShader->setMat4("model",           floorTransform.to_mat4());
-        floorShader->setMat4("projection",      projection);
-        floorShader->setMat4("view",            view);
-        floorShader->setVec3("camPos",          viewPos);
-
-        // Set material parameters
-        floorShader->setVec3("albedo_color",    material.color);
-        floorShader->setFloat("metallic",       material.metallic);
-        floorShader->setFloat("roughness",      material.roughness);
-        floorShader->setFloat("ao",             material.ao);
-		floorShader->setInt("albedo_texture",   0);
-
-        // Set light properties
-        floorShader->setVec3("light_position",  lightPosition);
-        floorShader->setVec3("light_color",     lightColor);
-
+		// draw the floor
         glBindVertexArray(floorVAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
@@ -110,7 +114,7 @@ namespace ui
         floorTransform.scale = glm::vec3(25.0f, 25.0f, 1.0f);
         floorTransform.rotation.x = SORC_PI * -0.5f;
 
-        std::vector<sVertex> vertices = {
+        std::vector<Vertex> vertices = {
             {glm::vec3(-0.5f, 0.5f, 0.0f)},
             {glm::vec3(0.5f, 0.5f, 0.0f)},
             {glm::vec3(0.5f, -0.5f, 0.0f)},
@@ -125,15 +129,15 @@ namespace ui
         glGenBuffers(1, &EBO);
         glBindVertexArray(floorVAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(sVertex), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*) 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) 0);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, normal));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, uv));
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
         glBindVertexArray(0);
     }
 

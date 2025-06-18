@@ -14,7 +14,7 @@ namespace render
     public:
 
         virtual ~IVertexBuffer() = default;
-        virtual void create(const std::vector<sVertex>& vertices, const std::vector<unsigned int>& indices) = 0;
+        virtual void create(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) = 0;
         virtual void destroy() = 0;
         virtual void bind() = 0;
         virtual void unbind() = 0;

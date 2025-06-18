@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Util.hpp"
-#include "core/Camera.h"
-#include "render/Mesh.h"
 //#include "Light.h"
 
+class Camera;
 class Shader;
+class Model;
+class Mesh;
 
 namespace ui 
 {
@@ -16,13 +17,17 @@ namespace ui
         
         Scene();
         
-        void init();
         void render();
-        void loadMesh(const std::string& filepath);
+
+        void loadModel(const std::string& filepath);
+		void loadTexture(const std::string& filepath);
 
         Camera* getCamera() { return camera.get(); }
-        Shader* getActiveShader() { return activeShader.get(); }
-        Mesh* getActiveMesh() { return activeMesh.get(); }
+		Shader* getLightsShader() { return lightsShader.get(); }
+		Model* getActiveModel() { return activeModel.get(); }
+        DirLight& getDirLight() { return dirLight; }
+
+		void setDirLight(const DirLight& light) { dirLight = light; }
 
     private:
 
@@ -34,18 +39,17 @@ namespace ui
 		// camera
         std::shared_ptr<Camera> camera;
 
-        // mesh
-        std::shared_ptr<Mesh> activeMesh;
-        std::shared_ptr<Shader> activeShader;
-		sTransform meshTransform;
+        // model
+        std::shared_ptr<Model> activeModel;
+		Transform modelTransform;
 
         // floor
         GLuint floorVAO;
-        sTransform floorTransform;
-        std::shared_ptr<Shader> floorShader;
+        Transform floorTransform;
 
-		glm::vec3 lightPosition;
-		glm::vec3 lightColor;
+        // lights
+		DirLight dirLight;
+        std::shared_ptr<Shader> lightsShader;
 
     };
 

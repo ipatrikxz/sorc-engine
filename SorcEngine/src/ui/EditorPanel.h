@@ -23,6 +23,11 @@ namespace ui
 			fileDialog.SetTypeFilters({ ".obj", ".fbx" });
 			fileDialog.SetDirectory("res/models/");
 
+			currentTextureFile = "< ... >";
+			textureFileDialog.SetTitle("Texture import dialog window");
+			textureFileDialog.SetTypeFilters({ ".png", ".jpg", ".jpeg" });
+			textureFileDialog.SetDirectory("res/textures/");
+
 			shaderColor = glm::vec3(1, 1, 1);
 		}
 
@@ -32,13 +37,21 @@ namespace ui
 			meshLoadCallback = callback;
 		}
 
+		void setTextureLoadCallback(const std::function<void(std::string)> callback)
+		{
+			textureLoadCallback = callback;
+		}
+
 	private:
 		// create a file browser instance
 		ImGui::FileBrowser fileDialog;
+		ImGui::FileBrowser textureFileDialog;
 
 		std::function<void(const std::string&)> meshLoadCallback;
+		std::function<void(const std::string&)> textureLoadCallback;
 
 		std::string currentFile;
+		std::string currentTextureFile;
 
 		glm::vec3 shaderColor;
 

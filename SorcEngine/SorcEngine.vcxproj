@@ -25,9 +25,10 @@
     </ClCompile>
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\render\Mesh.cpp" />
-    <ClCompile Include="src\render\Shader.cpp" />
-    <ClCompile Include="src\render\Texture.cpp" />
+    <ClCompile Include="src\object\Mesh.cpp" />
+    <ClCompile Include="src\object\Model.cpp" />
+    <ClCompile Include="src\object\Shader.cpp" />
+    <ClCompile Include="src\object\Texture.cpp" />
     <ClCompile Include="src\render\FrameBuffer.cpp" />
     <ClCompile Include="src\input\InputManager.cpp" />
     <ClCompile Include="src\render\Renderer.cpp" />
@@ -52,9 +53,10 @@
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\core\Camera.h" />
     <ClInclude Include="src\Engine.h" />
-    <ClInclude Include="src\render\Mesh.h" />
-    <ClInclude Include="src\render\Shader.h" />
-    <ClInclude Include="src\render\Texture.h" />
+    <ClInclude Include="src\object\Mesh.h" />
+    <ClInclude Include="src\object\Model.h" />
+    <ClInclude Include="src\object\Shader.h" />
+    <ClInclude Include="src\object\Texture.h" />
     <ClInclude Include="src\Renderer\Window.h" />
     <ClInclude Include="src\render\FrameBuffer.h" />
     <ClInclude Include="src\input\InputManager.h" />
@@ -370,6 +372,8 @@
     <ClInclude Include="vendor\tinyobjloader\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\lights.frag" />
+    <None Include="res\shaders\lights.vert" />
     <None Include="res\shaders\pbr.frag" />
     <None Include="res\shaders\pbr.vert" />
     <None Include="res\shaders\solidcolor.frag" />

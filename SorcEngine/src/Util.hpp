@@ -35,21 +35,20 @@ namespace fileUtil {
 * vec3 normal
 * vec2 uv
 */
-struct sVertex {
+struct Vertex {
 	glm::vec3 position = glm::vec3(0);
 	glm::vec3 normal = glm::vec3(0);
 	glm::vec2 uv = glm::vec2(0);
 };
 
-
 /*
-* sTransform is a structure that holds transformation data for an object in 3D space.
+* Transform structure holds transformation data for an object in 3D space.
 * vec3 location
 * vec3 rotation (in radians)
 * vec3 scale
 * mat4 to_mat4() function converts the transformation data into a 4x4 matrix.
 */
-struct sTransform {
+struct Transform {
 	glm::vec3 location = glm::vec3(0);
 	glm::vec3 rotation = glm::vec3(0);
 	glm::vec3 scale = glm::vec3(1);
@@ -62,17 +61,30 @@ struct sTransform {
 	};
 };
 
-
 /*
-* sMaterial is a simple structure to hold material properties.
+* Material structure to hold material properties.
 * vec3 color, 
 * float roughness,
 * float metallic, 
 * float ambient occlusion
 */
-struct sMaterial {
+struct Material {
 	glm::vec3 color = { 1.0f, 0.0f, 0.0f };
 	float roughness = 0.5f;
 	float metallic = 0.5f;
-	float ao = 1.0f; // ambient occlusion
+	float ambient = 1.0f;
+};
+
+/*
+* directional light structure.
+* vec3 direction
+* vec3 ambient
+* vec3 diffuse
+* vec3 specular
+*/
+struct DirLight {
+	glm::vec3 direction = glm::vec3(0, -1, 0);
+	glm::vec3 ambient = glm::vec3(1);
+	glm::vec3 diffuse = glm::vec3(0);
+	glm::vec3 specular = glm::vec3(0);
 };

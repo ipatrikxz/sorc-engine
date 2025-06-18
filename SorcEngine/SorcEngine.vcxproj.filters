@@ -21,16 +21,13 @@
     <ClCompile Include="src\Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\render\Texture.cpp">
+    <ClCompile Include="src\object\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\Mesh.cpp">
+    <ClCompile Include="src\object\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\window\Window.cpp">
@@ -90,6 +87,12 @@
     <ClCompile Include="vendor\include\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\object\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\object\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\GLFW\include\GLFW\glfw3.h">
@@ -104,10 +107,7 @@
     <ClInclude Include="src\Util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\render\Texture.h">
+    <ClInclude Include="src\object\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Camera.h">
@@ -116,7 +116,7 @@
     <ClInclude Include="vendor\tinyobjloader\tiny_obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\Mesh.h">
+    <ClInclude Include="src\object\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Window.h">
@@ -1049,6 +1049,12 @@
     <ClInclude Include="vendor\include\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\object\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\object\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\solidcolor.vert" />
@@ -1469,6 +1475,8 @@
     </None>
     <None Include="res\shaders\pbr.vert" />
     <None Include="res\shaders\pbr.frag" />
+    <None Include="res\shaders\lights.frag" />
+    <None Include="res\shaders\lights.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\wall.jpg">

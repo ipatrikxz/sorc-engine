@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "EditorPanel.h"
 #include "input/InputManager.h"
+#include "core/Camera.h"   
 
 // ImGui includes
 #include <imgui.h>
@@ -53,7 +54,8 @@ namespace ui
 
 		// setup callbacks for scene view and editor panel
         window.setResizeCallback([&](int w, int h) { getSceneView()->resize(w, h); });
-        editorPanel->setMeshLoadCallback([&](const std::string& filepath) { scene->loadMesh(filepath); });
+        editorPanel->setMeshLoadCallback([&](const std::string& filepath) { scene->loadModel(filepath); });
+		editorPanel->setTextureLoadCallback([&](const std::string& filepath) { scene->loadTexture(filepath); });
         
         return true;
     }
