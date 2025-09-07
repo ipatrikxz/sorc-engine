@@ -8,17 +8,9 @@
 #include "Shader.h"
 
 Mesh::Mesh()
-{
-    VAO = 0;
-	VBO = 0;
-    EBO = 0;
-    
-	name = "Unnamed Mesh";
-    
-    material.color = { 1.0f, 1.0f, 1.0f };  // Default white color
-    material.roughness = 0.5f;              // Default roughness
-    material.metallic = 0.5f;               // Default metallic
-	material.ambient = 0.5f;                // Default ambient occlusion
+	: name("Unnamed Mesh")
+{    
+    vertexBuffer = std::make_unique<render::VertexBuffer>();
 }
 
 
@@ -69,9 +61,7 @@ void Mesh::draw(Shader& shader)
     }
 
 	// draw mesh
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    vertexBuffer->draw(static_cast<int>(indices.size()));
 
     // Unbind textures
     for (unsigned int i = 0; i < textures.size(); i++)
@@ -83,25 +73,6 @@ void Mesh::draw(Shader& shader)
 
 void Mesh::setupMesh()
 {
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);  
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-    // vertex positions
-    glEnableVertexAttribArray(0);	
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    // vertex normals
-    glEnableVertexAttribArray(1);	
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-    // vertex texture coords
-    glEnableVertexAttribArray(2);	
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
-
-    glBindVertexArray(0);
+    vertexBuffer->setVertexData(vertices, indices);
 }
 

@@ -1,13 +1,10 @@
 #pragma once
 
 #include "window/Window.h"
-#include "SceneView.h"
 #include "Scene.h"
 #include "EditorPanel.h"
-
-namespace input {
-	class InputManager;
-}
+#include "input/InputManager.h"
+#include "ViewPort.h"
 
 namespace ui 
 {
@@ -18,7 +15,7 @@ namespace ui
     public:
     
         UIContext();
-        ~UIContext() = default;
+        ~UIContext();
 
         bool init(window::RenderWindow& window);
         bool initInput(input::InputManager& inputManager);
@@ -27,13 +24,15 @@ namespace ui
         void postRender();
         void destroy();
 
-        SceneView* getSceneView() { return sceneView.get(); }
 		Scene* getScene() { return scene.get(); }
+        float getDeltaTime() const;
 
     private:
+
+        void SetCustomImGuiStyle();
         
-        // window
-        std::unique_ptr<SceneView> sceneView;
+        // Viewport
+        std::unique_ptr<ViewPort> viewport;
 
 		// ui elements
         std::unique_ptr<Scene> scene;

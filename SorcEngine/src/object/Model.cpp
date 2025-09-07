@@ -9,6 +9,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include "Shader.h"
 
 Model::~Model()
 {
@@ -89,18 +90,24 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene)
         }
     }
 
+    // Create material for this mesh
+    Material material;
+    material.color = { 1.0f, 1.0f, 1.0f };  // Default white color
+    material.roughness = 0.5f;
+    material.metallic = 0.5f;
+    material.ambient = 1.0f;
+
     if (mesh->mMaterialIndex >= 0) 
     {
         aiMaterial* aiMat = scene->mMaterials[mesh->mMaterialIndex];
         aiColor3D diffuse;
 		aiColor3D specular;
         aiColor3D ambient;
-		float metallic, roughness;
 
-        // diffuse color
+        // Get diffuse color from material
         if (aiMat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse) == AI_SUCCESS)
         {
-            //std::cout << "Color Diffuse: " << diffuse.r << " " << diffuse.g << " " << diffuse.b << std::endl;
+            material.color = { diffuse.r, diffuse.g, diffuse.b };
         }
 
         // load texture
@@ -129,6 +136,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
     newMesh->setupMesh();
     meshes.push_back(newMesh);
+    materials.push_back(material);
 }
 
 Texture* Model::isTextureLoaded(const std::string& texturePath) const
@@ -156,8 +164,15 @@ Texture* Model::loadAndCacheTexture(const std::string& texturePath, const std::s
 
 void Model::draw(Shader& shader) 
 {
-    for (auto& mesh : meshes) {
-        mesh->draw(shader);
+    for (size_t i = 0; i < meshes.size(); ++i) {
+        // Set material uniforms for this mesh
+        const Material& material = materials[i];
+        shader.setVec3("material.color", material.color);
+        shader.setFloat("material.roughness", material.roughness);
+        shader.setFloat("material.metallic", material.metallic);
+        shader.setFloat("material.ambient", material.ambient);
+        
+        meshes[i]->draw(shader);
     }
 }
 

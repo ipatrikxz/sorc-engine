@@ -73,6 +73,10 @@ struct Material {
 	float roughness = 0.5f;
 	float metallic = 0.5f;
 	float ambient = 1.0f;
+
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+	glm::vec3 shininess;
 };
 
 /*

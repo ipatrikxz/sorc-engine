@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Util.hpp"
-//#include "Light.h"
+#include "light/Lights.h"
+#include "render/VertexBuffer.h"
+#include <memory>
 
 class Camera;
 class Shader;
@@ -23,11 +25,11 @@ namespace ui
 		void loadTexture(const std::string& filepath);
 
         Camera* getCamera() { return camera.get(); }
-		Shader* getLightsShader() { return lightsShader.get(); }
+		Shader* getLightsShader() { return lights.getLightsShader(); }
 		Model* getActiveModel() { return activeModel.get(); }
-        DirLight& getDirLight() { return dirLight; }
 
-		void setDirLight(const DirLight& light) { dirLight = light; }
+		// light management
+		Lights& getLights() { return lights; }
 
     private:
 
@@ -44,12 +46,11 @@ namespace ui
 		Transform modelTransform;
 
         // floor
-        GLuint floorVAO;
+        std::unique_ptr<render::VertexBuffer> floorVertexBuffer;
         Transform floorTransform;
 
         // lights
-		DirLight dirLight;
-        std::shared_ptr<Shader> lightsShader;
+        Lights lights;
 
     };
 

@@ -33,7 +33,7 @@
     <ClCompile Include="src\window\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui\SceneView.cpp">
+    <ClCompile Include="src\ui\ViewPort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\render\Renderer.cpp">
@@ -93,6 +93,9 @@
     <ClCompile Include="src\object\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\light\Lights.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\GLFW\include\GLFW\glfw3.h">
@@ -128,7 +131,7 @@
     <ClInclude Include="src\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\SceneView.h">
+    <ClInclude Include="src\ui\ViewPort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\render\RenderBase.h">
@@ -1053,6 +1056,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\object\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\light\Lights.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\ProfilerTimeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

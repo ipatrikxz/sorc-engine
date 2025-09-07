@@ -11,13 +11,13 @@ namespace ui { class Scene; }
 namespace ui 
 {
 
-    class SceneView 
+    class ViewPort 
     {
 
     public:
 
-        SceneView();
-        ~SceneView() {};
+        ViewPort();
+        ~ViewPort() {};
 
         void render(Scene& scene);
         void resize(int width, int height);

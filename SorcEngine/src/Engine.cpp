@@ -48,21 +48,20 @@ namespace app
 
         while (window->getIsRunning())
         {
-            float deltaTime = uiContext->getSceneView()->getDeltaTime();
+            float deltaTime = uiContext->getDeltaTime();
             
             // update inputManager
             inputManager->setDeltaTime(deltaTime);
             inputManager->processInput(*window);
 
-            // Pre Render
+            // frame
             renderer->preRender();
+            
+            // context
             uiContext->preRender();
-            
-            // Render
             uiContext->render();
-            
-            // Post Render
             uiContext->postRender();
+
             renderer->postRender();
             
             window->swapBuffers();

@@ -5,26 +5,25 @@
 #include <memory>
 #include <string>
 
-#include "SceneView.h"
-#include "Scene.h"
-#include "EditorPanel.h"
-#include "input/InputManager.h"
-#include "core/Camera.h"   
-
 // ImGui includes
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+
+#include "core/Camera.h"   
+#include "render/FrameBuffer.h"
 
 namespace ui 
 {
     
     UIContext::UIContext() 
     {
+        viewport = std::make_unique<ViewPort>();
 		scene = std::make_unique<Scene>();
-		sceneView = std::make_unique<SceneView>();
         editorPanel = std::make_unique<EditorPanel>();
     }
+
+    UIContext::~UIContext() = default;
 
     bool UIContext::init(window::RenderWindow& window) 
     {
@@ -37,8 +36,7 @@ namespace ui
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     
         ImGui::StyleColorsDark();
-        ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.1f, 0.1f, 1.0f };
-        ImGui::GetStyle().WindowRounding = 0.0f;
+		SetCustomImGuiStyle();
 
         if (!ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(window.getNativeWindow()), true)) 
         {
@@ -53,7 +51,7 @@ namespace ui
         }
 
 		// setup callbacks for scene view and editor panel
-        window.setResizeCallback([&](int w, int h) { getSceneView()->resize(w, h); });
+        window.setResizeCallback([&](int w, int h) { viewport->resize(w, h); });
         editorPanel->setMeshLoadCallback([&](const std::string& filepath) { scene->loadModel(filepath); });
 		editorPanel->setTextureLoadCallback([&](const std::string& filepath) { scene->loadTexture(filepath); });
         
@@ -84,7 +82,7 @@ namespace ui
 
     void UIContext::render()
     {
-        sceneView->render(*scene);
+        viewport->render(*scene);
         editorPanel->render(*scene);
     }
 
@@ -131,5 +129,55 @@ namespace ui
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+    }
+
+    float UIContext::getDeltaTime() const
+    {
+        return viewport ? viewport->getDeltaTime() : 0.0f;
+    }
+
+    void UIContext::SetCustomImGuiStyle()
+    {
+        ImGuiStyle& style = ImGui::GetStyle();
+
+        style.Alpha = 1.0;
+        style.WindowRounding = 3;
+        style.GrabRounding = 1;
+        style.GrabMinSize = 20;
+        style.FrameRounding = 3;
+
+        style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
+        style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.00f, 0.40f, 0.41f, 1.00f);
+        style.Colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
+        style.Colors[ImGuiCol_Border] = ImVec4(0.00f, 1.00f, 1.00f, 0.65f);
+        style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+        style.Colors[ImGuiCol_FrameBg] = ImVec4(0.44f, 0.80f, 0.80f, 0.18f);
+        style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.44f, 0.80f, 0.80f, 0.27f);
+        style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.44f, 0.81f, 0.86f, 0.66f);
+        style.Colors[ImGuiCol_TitleBg] = ImVec4(0.14f, 0.18f, 0.21f, 0.73f);
+        style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.54f);
+        style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.27f);
+        style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.20f);
+        style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.22f, 0.29f, 0.30f, 0.71f);
+        style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.00f, 1.00f, 1.00f, 0.44f);
+        style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.00f, 1.00f, 1.00f, 0.74f);
+        style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
+        style.Colors[ImGuiCol_CheckMark] = ImVec4(0.00f, 1.00f, 1.00f, 0.68f);
+        style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.00f, 1.00f, 1.00f, 0.36f);
+        style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.76f);
+        style.Colors[ImGuiCol_Button] = ImVec4(0.00f, 0.65f, 0.65f, 0.46f);
+        style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.01f, 1.00f, 1.00f, 0.43f);
+        style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.62f);
+        style.Colors[ImGuiCol_Header] = ImVec4(0.00f, 1.00f, 1.00f, 0.33f);
+        style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.00f, 1.00f, 1.00f, 0.42f);
+        style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.54f);
+        style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 1.00f, 1.00f, 0.54f);
+        style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.00f, 1.00f, 1.00f, 0.74f);
+        style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
+        style.Colors[ImGuiCol_PlotLines] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
+        style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
+        style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
+        style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
+        style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 1.00f, 1.00f, 0.22f);
     }
 }

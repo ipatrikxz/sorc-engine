@@ -25,19 +25,19 @@ enum class WindowedMode { WINDOWED, FULLSCREEN };
 #define APP_WINDOW_TITLE	"SorcEngine"
 #define APP_VERSION			"0.0.1"
 
-#define SORC_WINDOW_WIDTH	1280
+#define SORC_WINDOW_WIDTH	1920
 #define SORC_WINDOW_HEIGHT	720
 #define SORC_ASPECT_RATIO	(1980.0f / 1080.0f)
 #define SORC_PI				3.141592653589793f
 #define SORC_HALF_PI		1.57079632679f
 
 #define UNDEFINED_STRING	"UNDEFINED_STRING"
-#define NEAR_PLANE			0.01f
+#define NEAR_PLANE			0.1f
 #define FAR_PLANE			50.0f
 #define FOV					50.0f
 #define MAX_FOV				120.0f
 #define MIN_FOV				45.0f
-#define MAX_SPEED			10.0f
+#define MAX_SPEED			20.0f
 #define MIN_SPEED			0.0f
 
 // colors

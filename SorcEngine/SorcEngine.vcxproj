@@ -24,6 +24,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vendor\GLFW\include;vendor\glad\include;vendor\glm\glm;vendor\imgui;vendor\stb_image;vendor\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\light\Lights.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\object\Mesh.cpp" />
     <ClCompile Include="src\object\Model.cpp" />
@@ -36,7 +37,7 @@
     <ClCompile Include="src\ui\EditorPanel.cpp" />
     <ClCompile Include="src\ui\UIContext.cpp" />
     <ClCompile Include="src\ui\Scene.cpp" />
-    <ClCompile Include="src\ui\SceneView.cpp" />
+    <ClCompile Include="src\ui\ViewPort.cpp" />
     <ClCompile Include="src\window\Window.cpp" />
     <ClCompile Include="vendor\include\glad\src\glad.c" />
     <ClCompile Include="vendor\include\glm\glm\detail\glm.cpp" />
@@ -53,6 +54,7 @@
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\core\Camera.h" />
     <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\light\Lights.h" />
     <ClInclude Include="src\object\Mesh.h" />
     <ClInclude Include="src\object\Model.h" />
     <ClInclude Include="src\object\Shader.h" />
@@ -64,10 +66,11 @@
     <ClInclude Include="src\render\Renderer.h" />
     <ClInclude Include="src\render\VertexBuffer.h" />
     <ClInclude Include="src\ui\EditorPanel.h" />
+    <ClInclude Include="src\ui\ProfilerTimeline.h" />
     <ClInclude Include="src\ui\UIContext.h" />
     <ClInclude Include="src\Util.hpp" />
     <ClInclude Include="src\ui\Scene.h" />
-    <ClInclude Include="src\ui\SceneView.h" />
+    <ClInclude Include="src\ui\ViewPort.h" />
     <ClInclude Include="src\window\Window.h" />
     <ClInclude Include="vendor\3rdparty\plugins\imgui\imfilebrowser.h" />
     <ClInclude Include="vendor\GLFW\include\GLFW\glfw3.h" />

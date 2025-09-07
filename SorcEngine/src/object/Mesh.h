@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Util.hpp"
+#include "render/VertexBuffer.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 class Shader;
 class Texture;
@@ -18,10 +20,8 @@ public:
 
     std::vector<Vertex>& getVertices() { return vertices; }
     std::vector<unsigned int>& getIndices() { return indices; }
-    Material& getMaterial() { return material; }
     std::vector<Texture*>& getTextures() { return textures; }
 
-    void setMaterial(const Material& mat) { material = mat; }
     void setTransform(const Transform& transform) { this->transform = transform; }
     void setName(const std::string& name) { this->name = name; }
 
@@ -29,11 +29,10 @@ private:
     std::string name;
 
     Transform transform;
-    Material material;
 
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures;
 
-    unsigned int VAO, VBO, EBO;
+    std::unique_ptr<render::VertexBuffer> vertexBuffer;
 };

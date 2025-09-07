@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RenderBase.h"
+#include <vector>
 
 namespace render 
 {
@@ -15,6 +16,15 @@ namespace render
         void bind() override;
         void unbind() override;
         void draw(int indexCount) override;
+
+        // Lazy initialization
+        void setVertexData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+        void ensureInitialized();
+
+    private:
+        std::vector<Vertex> cachedVertices;
+        std::vector<unsigned int> cachedIndices;
+        bool isInitialized = false;
     };
 
 }

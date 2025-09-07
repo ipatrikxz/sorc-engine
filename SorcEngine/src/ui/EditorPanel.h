@@ -3,9 +3,11 @@
 #include <string>
 #include <functional>
 #include <glm/glm.hpp>
+#include <memory>
 
 #include "imgui.h"
 #include <imfilebrowser.h>
+#include "ProfilerTimeline.h"
 
 namespace ui
 {
@@ -29,6 +31,7 @@ namespace ui
 			textureFileDialog.SetDirectory("res/textures/");
 
 			shaderColor = glm::vec3(1, 1, 1);
+			profilerGraph = std::make_unique<ImGuiUtils::ProfilerTimeline>(300);
 		}
 
 		void render(ui::Scene& scene);
@@ -43,6 +46,12 @@ namespace ui
 		}
 
 	private:
+
+		void drawMeshControls(ui::Scene& scene);
+		void drawLightControls(ui::Scene& scene);
+		void drawCameraInfo(ui::Scene& scene);
+		void drawPerformanceInfo(ui::Scene& scene);
+
 		// create a file browser instance
 		ImGui::FileBrowser fileDialog;
 		ImGui::FileBrowser textureFileDialog;
@@ -54,6 +63,9 @@ namespace ui
 		std::string currentTextureFile;
 
 		glm::vec3 shaderColor;
+
+		// LegitProfiler-style renderer
+		std::unique_ptr<ImGuiUtils::ProfilerTimeline> profilerGraph;
 
 	};
 }

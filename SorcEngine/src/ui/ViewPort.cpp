@@ -1,20 +1,20 @@
 
-#include "SceneView.h"
+#include "ViewPort.h"
 #include <imgui.h>
 #include "Scene.h"
 #include "core/Camera.h"
 
 namespace ui 
 {
-    SceneView::SceneView()
+    ViewPort::ViewPort()
         : sizeX(0), sizeY(0), deltaTime(0) 
     {
         frameBuffer = std::make_unique<render::FrameBuffer>();
     }
 
-    void SceneView::render(Scene& scene) 
+    void ViewPort::render(Scene& scene)
     {
-        ImGui::Begin("Scene View");
+        ImGui::Begin("Scene");
         
         ImVec2 currentSize = ImGui::GetContentRegionAvail();
         if ((int)(currentSize.x) != (int)(sizeX) ||
@@ -40,14 +40,14 @@ namespace ui
         ImGui::End();
     }
 
-    void SceneView::resize(int width, int height) 
+    void ViewPort::resize(int width, int height)
     {
         sizeX = static_cast<float>(width);
         sizeY = static_cast<float>(height);
         frameBuffer->resize(width, height);
     }
 
-    void SceneView::updateDeltaTime() 
+    void ViewPort::updateDeltaTime()
     {
         static float lastFrame = 0.0f;
         float currentFrame = static_cast<float>(glfwGetTime());
