@@ -15,7 +15,7 @@ A lightweight 3D model loader and viewer (WIP) built with OpenGL, GLFW, and GLM 
 - glad
 - GLFW
 - glm
-- tinyobjloader
+- assimp
 - ImGui
 - stb_image
 
