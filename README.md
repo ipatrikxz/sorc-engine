@@ -39,3 +39,6 @@ A lightweight 3D model loader and viewer (WIP) built with OpenGL, GLFW, and GLM 
 - Run and explore!
 
 Note: Work in progress, expect bugs. Feedback welcome!
+
+
+<img width="720" height="480" alt="image" src="https://github.com/user-attachments/assets/ecfed614-4a91-4bb3-a5e5-c28dd1cf7f07" />
