@@ -29,7 +29,7 @@ namespace ui
     void Scene::render() 
     {	
         drawMesh();
-        drawFloor();
+        //drawFloor();
         lights.renderLightGizmo(camera.get());
     }
 
