@@ -18,6 +18,3 @@ bin-int/
 build/
 x64/
 
-# Dependencies
-external/
-lib/
