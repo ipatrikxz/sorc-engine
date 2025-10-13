@@ -33,7 +33,8 @@ A lightweight 3D model loader and viewer (WIP) built with OpenGL, GLFW, and GLM 
 
 ## Setup
 
-- Run setup.bat to generate the solution file using premake.
+- Inside Scripts folder:
+  - Run Setup.bat to pull the premake5.exe and generates solution file visual studio 22.
 - Open the generated solution file in your IDE.
 - Build and run the project.
 - Note: Work in progress, expect bugs. Feedback welcome!
