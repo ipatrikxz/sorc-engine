@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Util.hpp"
+#include "Util.h"
 #include "light/Lights.h"
 #include "render/VertexBuffer.h"
 #include <memory>

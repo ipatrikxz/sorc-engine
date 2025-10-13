@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util.hpp"
+#include "util.h"
 #include "window/Window.h"
 
 class RenderWindow;

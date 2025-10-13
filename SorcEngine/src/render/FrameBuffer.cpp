@@ -37,10 +37,6 @@ namespace render
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthId, 0);
 
         GLenum buffers[1] = { GL_COLOR_ATTACHMENT0 };
-        glDrawBuffers(1, buffers);
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            throw std::runtime_error("Framebuffer is not complete");
-        }
 
         unbind();
     }

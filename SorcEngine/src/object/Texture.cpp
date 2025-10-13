@@ -2,10 +2,11 @@
 
 #include "Texture.h"
 
-#include "Util.hpp"
+#include "Util.h"
 #include "stb_image.h"
 
 Texture::Texture()
+    : ID(0), type(TextureType::DIFFUSE)
 {
 }
 

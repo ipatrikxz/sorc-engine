@@ -2,7 +2,7 @@
 
 #include "EditorPanel.h"
 
-#include "Util.hpp"
+#include "Util.h"
 #include "Scene.h"
 #include "core/Camera.h"
 #include "ProfilerTimeline.h"

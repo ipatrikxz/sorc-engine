@@ -2,6 +2,7 @@
 
 #define GLM_FORCE_SILENT_WARNINGS
 #define GLM_ENABLE_EXPERIMENTAL
+#define STB_IMAGE_IMPLEMENTATION
 
 #include <iostream>			// Includes the standard I/O stream library. Used for input and output operations, e.g., cout, cin.
 #include <fstream>			// Includes the file stream library. Used for file input and output operations, e.g., ifstream, ofstream.

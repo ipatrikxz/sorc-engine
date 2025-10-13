@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Shader.h"
-#include "Util.hpp"
+#include "Util.h"
 
 int checkCompileErrors(unsigned int shader, std::string type)
 {

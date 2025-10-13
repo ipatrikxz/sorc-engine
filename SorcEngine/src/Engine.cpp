@@ -31,7 +31,7 @@ namespace app
 
         if (!uiContext->init(*window)) return false;
 
-		// Abstract this away from the engine
+		// TODO: Abstract this away from the engine
         if (!uiContext->initInput(*inputManager)) return false;
 
         return true;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Util.hpp"
+#include "Util.h"
 #include "render/VertexBuffer.h"
 #include <vector>
 #include <string>

@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 
-enum TextureType {
+enum TextureType 
+{
     DIFFUSE,
     SPECULAR,
     NORMAL,

@@ -22,6 +22,7 @@ namespace ui
 		modelTransform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
         loadModel("res/models/Sphere.obj");
+        loadTexture("res/textures/wall.jpg");
         setupFloor();
     }
 
