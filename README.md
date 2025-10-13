@@ -3,7 +3,7 @@ A lightweight 3D model loader and viewer (WIP) built with OpenGL, GLFW, and GLM 
 
 ## Features
 
-- 3D model loading with tinyobjloader
+- 3D model loading with assimp
 - Texture support via stb_image
 - WASD + mouse camera system
 - Shader-based rendering
