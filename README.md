@@ -43,4 +43,6 @@ A lightweight 3D model loader and viewer (WIP) built with OpenGL, GLFW, and GLM 
 
 SorcEngine is licensed under the MIT License - see the LICENSE file for details.
 
+## Screenshots
+
 <img width="720" height="480" alt="image" src="https://github.com/user-attachments/assets/ecfed614-4a91-4bb3-a5e5-c28dd1cf7f07" />
