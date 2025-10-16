@@ -1,7 +1,0 @@
-[submodule "SorcEngine/vendor/include/GLFW"]
-	path = SorcEngine/vendor/GLFW
-	url = https://github.com/TheCherno/glfw.git
-	branch = master
-[submodule "SorcEngine/vendor/include/glm"]
-	path = SorcEngine/vendor/glm
-	url = https://github.com/g-truc/glm
